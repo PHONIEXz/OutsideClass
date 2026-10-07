@@ -61,3 +61,9 @@ Challenge: https://dev.to/devteam/join-the-hacktoberfest-open-source-ai-challeng
 - `test/`: Node built-in test runner.
 
 MIT-licensed application source. Gemma model usage remains subject to Google's applicable model and service terms.
+
+## Learning pages and updates
+
+Home (`/`), activities (`/learn`), notebook (`/notebook`), guides (`/guides`) and updates (`/updates`) have direct URLs and browser history navigation. Activity timers support pause, resume and recovery after refresh using device-local timestamps; they do not provide a background alarm.
+
+Subscribe to `/updates.xml` with an RSS reader. To publish news, add an item with a unique GUID to `public/updates.xml` and a matching article to the Updates page in `public/index.html`. Email subscription is not configured and no email addresses are collected.
