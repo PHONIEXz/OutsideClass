@@ -77,3 +77,24 @@ test('provider includes app-owned precautions for a window activity',async()=>{
  try{const r=response();await handler({method:'POST',body:{...solo,place:'By a window',mobility:'Seated',audience:'Family',groupSize:3,ageRange:'5-7'}},r);assert.equal(r.code,200);assert.ok(r.data.activity.beforeYouGo.some(note=>note.includes('window closed')));assert.ok(r.data.activity.beforeYouGo.some(note=>note.includes('Stay seated')));}
  finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
 });
+test('weather and time are optional manual choices with strict allowed values',()=>{
+ const defaults=validateInput(solo);assert.equal(defaults.weather,'Any');assert.equal(defaults.timeOfDay,'Any');
+ assert.equal(validateInput({...solo,weather:'Rainy',timeOfDay:'Evening'}).weather,'Rainy');
+ assert.throws(()=>validateInput({...solo,weather:'Stormy'}),/weather/);
+ assert.throws(()=>validateInput({...solo,timeOfDay:'Night'}),/time of day/);
+});
+test('conditions guide the prompt and add app-controlled safety notes',()=>{
+ const input=validateInput({...solo,place:'By a window',mobility:'Seated',weather:'Rainy',timeOfDay:'Evening'});
+ const prompt=promptFor(input);assert.match(prompt,/weather \(Rainy\) and time of day \(Evening\)/);
+ assert.match(prompt,/indoors at a closed window/);assert.match(prompt,/while seated/);
+ const notes=safetyNotes(input).join(' ');assert.match(notes,/thunder/);assert.match(notes,/slippery/);assert.match(notes,/still light/);
+ assert.match(safetyNotes({...solo,weather:'Windy'}).join(' '),/trees/);
+ assert.equal(safetyNotes({...solo,weather:'Hot',timeOfDay:'Midday'}).filter(n=>n.includes('shade')).length,1);
+ assert.equal(safetyNotes(validateInput(solo)).length,safetyNotes(solo).length);
+});
+test('provider returns selected conditions and their precautions',async()=>{
+ const oldKey=process.env.GEMMA_API_KEY,oldFetch=global.fetch;process.env.GEMMA_API_KEY='test';
+ global.fetch=async(url,init)=>{assert.match(JSON.parse(init.body).contents[0].parts[0].text,/weather \(Windy\)/);return{ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(samples[0])}]}}]})};};
+ try{const r=response();await handler({method:'POST',body:{...solo,weather:'Windy',timeOfDay:'Midday'}},r);assert.equal(r.code,200);assert.equal(r.data.activity.weather,'Windy');assert.equal(r.data.activity.timeOfDay,'Midday');assert.ok(r.data.activity.beforeYouGo.some(n=>n.includes('trees')));assert.ok(r.data.activity.beforeYouGo.some(n=>n.includes('shade')));}
+ finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
+});
