@@ -36,6 +36,6 @@ export default async function handler(req,res) {
  const raw=Array.isArray(parts)?parts.filter(p=>p && !p.thought && typeof p.text==='string').map(p=>p.text).join(''):'';
  if(!raw.trim())return fail(res,502,'AI_EMPTY','Gemma returned no activity text. Please retry or choose a sample.');
  let activity;
- try{activity=parseActivity(raw);}catch{return fail(res,502,'AI_ACTIVITY_FORMAT','Gemma replied, but the activity card was not in the required format. Please retry.');}
+ try{activity=parseActivity(raw,input.audience);}catch{return fail(res,502,'AI_ACTIVITY_FORMAT','Gemma replied, but the activity card was not in the required format. Please retry.');}
  return res.status(200).json({activity:{...activity,...input,source:`Gemma · ${model}`}});
 }

@@ -28,3 +28,33 @@ test('distinguishes provider failures and excludes thinking from activity JSON',
   assert.equal(r.code,200);assert.equal(r.data.activity.title,samples[0].title);
  }finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;if(oldModel===undefined)delete process.env.GEMMA_MODEL;else process.env.GEMMA_MODEL=oldModel;}
 });
+
+// ---- Group mode ----
+import {promptFor} from '../lib/activity.js';
+const solo={topic:'Light',minutes:10,level:'Beginner',place:'Courtyard'};
+const groupCard={...samples[0],groupTips:'Work in pairs. Agree a boundary first.',discussion:['What did you notice first?','What surprised you?']};
+test('defaults to a solo learner and keeps the prompt free of group text',()=>{
+ const input=validateInput(solo);assert.equal(input.audience,'Myself');assert.equal(input.groupSize,undefined);
+ assert.ok(!promptFor(input).includes('discussion'));
+});
+test('validates group size, age range and audience',()=>{
+ const ok=validateInput({...solo,audience:'Class',groupSize:25,ageRange:'8-10'});assert.equal(ok.groupSize,25);
+ for(const bad of [{audience:'Class',groupSize:1,ageRange:'8-10'},{audience:'Class',groupSize:41,ageRange:'8-10'},{audience:'Class',groupSize:2.5,ageRange:'8-10'},{audience:'Class',groupSize:10,ageRange:'3'},{audience:'Class',ageRange:'8-10'},{audience:'Boss',groupSize:5,ageRange:'8-10'}])
+  assert.throws(()=>validateInput({...solo,...bad}),bad.audience);
+});
+test('group prompt asks for leader guidance and discussion questions',()=>{
+ const p=promptFor(validateInput({...solo,audience:'Class',groupSize:25,ageRange:'8-10'}));
+ assert.match(p,/discussion/);assert.match(p,/groupTips/);assert.match(p,/25 learners aged 8-10/);
+});
+test('group cards must include guidance; extra fields are stripped for solo cards',()=>{
+ assert.throws(()=>parseActivity(JSON.stringify(samples[0]),'Class'));
+ assert.throws(()=>parseActivity(JSON.stringify({...groupCard,discussion:['only one']}),'Class'));
+ assert.deepEqual(parseActivity(JSON.stringify(groupCard),'Class').discussion,groupCard.discussion);
+ assert.equal(parseActivity(JSON.stringify(groupCard)).discussion,undefined);
+});
+test('mocked provider returns a group card end to end',async()=>{
+ const oldKey=process.env.GEMMA_API_KEY,oldFetch=global.fetch;process.env.GEMMA_API_KEY='test';
+ global.fetch=async(url,init)=>{assert.match(JSON.parse(init.body).contents[0].parts[0].text,/groupTips/);return{ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(groupCard)}]}}]})};};
+ try{const r=response();await handler({method:'POST',body:{...solo,audience:'Family',groupSize:3,ageRange:'5-7'}},r);assert.equal(r.code,200);assert.equal(r.data.activity.groupSize,3);assert.equal(r.data.activity.discussion.length,2);}
+ finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
+});
