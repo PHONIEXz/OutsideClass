@@ -2,6 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
+import {diagramHtml} from '../public/diagrams.js';
 import {samples} from '../public/samples.js';
 
 // Run the real UI handlers with controlled browser storage failures.
@@ -14,9 +15,9 @@ function browser(saved=[],overrides={}){
   document:{getElementById:element,querySelectorAll:()=>[],addEventListener(){},body:{classList:{toggle(){}}}},
   window:{scrollTo(){},addEventListener(){}},location:{pathname:'/'},history:{pushState(){}},navigator:{},
   localStorage:{getItem:k=>stored.get(k)||null,setItem(k,v){if(failSave)throw Error('quota');stored.set(k,v);},removeItem:k=>stored.delete(k)},
-  samples,safetyNotes:()=>[],MAX_PHOTOS:2,
+  samples,diagramHtml,safetyNotes:()=>[],MAX_PHOTOS:2,
   readPhotos:async()=>[],writePhotos:async(id,photos)=>writes.push({id,photos}),removePhotos:async id=>deleted.push(id),shrinkPhoto:async f=>f,...overrides};
- vm.runInNewContext(source+`\nglobalThis.api={render,persist,deleteNote,get notes(){return notes;},get current(){return current;},get load(){return photoLoad;},setPhotos(photos){photoDraft=photos;}};`,sandbox);
+ vm.runInNewContext(source+`\nglobalThis.api={render,persist,deleteNote,addPhotos,get notes(){return notes;},get current(){return current;},get load(){return photoLoad;},setPhotos(photos){photoDraft=photos;}};`,sandbox);
  return {api:sandbox.api,element,stored,deleted,writes,failSave:()=>{failSave=true;}};
 }
 const note=(id,photoCount=1)=>({id,activity:samples[0],reflection:'Original note',reflectionAnswers:{noticed:'Original note'},photoCount,date:'2026-10-07T10:00:00Z'});
@@ -61,4 +62,18 @@ test('text-only notes can save without photo storage support',async()=>{
  const b=browser([note('text',0)],{readPhotos:async()=>{throw Error('unsupported');}});
  b.api.render(samples[0],'text');b.element('reflection-noticed').value='Leaves';
  assert.equal(await b.api.persist(true),true);assert.equal(b.writes.length,0);
+});
+
+test('upload prepares two images and saves them without requiring a reflection',async()=>{
+ const b=browser();b.api.render(samples[0]);
+ const images=[new Blob(['one'],{type:'image/png'}),new Blob(['two'],{type:'image/jpeg'})];
+ await b.api.addPhotos({target:{files:images,value:'selected'}});
+ assert.equal(await b.api.persist(false),true);assert.equal(b.api.notes[0].photoCount,2);
+ assert.equal(b.writes[0].photos.length,2);assert.equal(b.api.notes[0].reflection,'');
+});
+test('an upload beyond the two-image limit is rejected without changing the saved card',async()=>{
+ const b=browser();b.api.render(samples[0]);
+ await b.api.addPhotos({target:{files:[1,2,3],value:'selected'}});
+ assert.match(b.element('photo-status').textContent,/up to two/);
+ await b.api.persist(false);assert.equal(b.api.notes[0].photoCount,0);assert.equal(b.writes.length,0);
 });

@@ -75,3 +75,9 @@ Name a nearby spot while building a card. A field note can capture what was noti
 Each note can also keep up to two evidence photos in browser IndexedDB. The browser resizes them to at most 1200 px and 600 KB as JPEGs, stripping original metadata. They appear on reopened cards, in the notebook and on printouts. Photos are never sent to Gemma or the server. Browser storage limits can prevent a save; clearing browser data removes the photos and notes together. Supported uploads: PNG, JPEG, WebP and GIF (first frame).
 
 Photo saves reject aborted storage transactions. If saved photos cannot be read, the card prevents an update until it is reopened successfully. Failed notebook deletions keep their photos, and cards removed by the 100-card limit have their photos cleaned up.
+
+## Learning illustrations and uploads
+
+Cards about shadows/light, symmetry, biodiversity and plant parts/growth automatically include a labelled, curated SVG learning diagram. These are educational examples drawn by the website, not AI-generated images or recorded field evidence. Other topics continue to work without a diagram. Diagrams work offline, appear in printed cards and can be downloaded as SVGs.
+
+The card's “Your own images” section accepts up to two photos or sketches. Use Save card to keep images even before writing a reflection. Personal images remain in local browser storage.
