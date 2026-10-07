@@ -1,5 +1,5 @@
 import http from 'node:http';import {readFile} from 'node:fs/promises';import handler from './api/activity.js';
-const files={'/':'index.html','/learn':'index.html','/notebook':'index.html','/guides':'index.html','/updates':'index.html','/activity':'index.html','/updates.xml':'updates.xml','/app.js':'app.js','/style.css':'style.css','/sw.js':'sw.js','/photos.js':'photos.js','/samples.js':'samples.js','/safety.js':'safety.js','/outsideclass-logo.png':'outsideclass-logo.png'};
+const files={'/':'index.html','/learn':'index.html','/notebook':'index.html','/guides':'index.html','/updates':'index.html','/activity':'index.html','/updates.xml':'updates.xml','/app.js':'app.js','/style.css':'style.css','/sw.js':'sw.js','/diagrams.js':'diagrams.js','/photos.js':'photos.js','/samples.js':'samples.js','/safety.js':'safety.js','/outsideclass-logo.png':'outsideclass-logo.png'};
 http.createServer(async(req,res)=>{
  res.status=n=>{res.statusCode=n;return res;};res.json=x=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(x));};
  const path=new URL(req.url,'http://localhost').pathname;
