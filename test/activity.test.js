@@ -103,6 +103,7 @@ test('return visits use bounded observations and respect original access needs',
  const input=validateInput({...solo,place:'By a window',mobility:'Seated',spot:'Kitchen window',previous});
  assert.equal(input.spot,'Kitchen window');assert.deepEqual(input.previous,previous);
  const prompt=promptFor(input);assert.match(prompt,/return visit/);assert.match(prompt,/previously reported/);assert.match(prompt,/indoors at a closed window/);assert.match(prompt,/while seated/);
+ assert.match(prompt,/selected place field is the physical setting/);
  assert.throws(()=>validateInput({...solo,spot:'A'.repeat(61)}),/spot/);
  assert.throws(()=>validateInput({...solo,previous:{...previous,noticed:'A'.repeat(351)}}),/previous/);
  assert.throws(()=>validateInput({...solo,previous:{noticed:'x'}}),/previous/);

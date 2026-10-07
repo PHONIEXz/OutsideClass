@@ -71,3 +71,5 @@ Subscribe to `/updates.xml` with an RSS reader. To publish news, add an item wit
 ## Same Spot Experiment and Evidence Trails
 
 Name a nearby spot while building a card. A field note can capture what was noticed, a possible explanation, an alternative and a question. From the notebook, “Return to this spot” uses up to 350 characters of each answer to ask Gemma for a new observation that compares with the first one. Earlier notes remain separate and are linked by their local ID. An optional named spot should be a nickname, not an address. Observations and notes stay on this device except when a user intentionally generates a return activity: then the four bounded answers are sent to the configured Gemma API.
+
+Each note can also keep up to two evidence photos in browser IndexedDB. The browser resizes them to at most 1200 px and 600 KB as JPEGs, stripping original metadata. They appear on reopened cards, in the notebook and on printouts. Photos are never sent to Gemma or the server. Browser storage limits can prevent a save; clearing browser data removes the photos and notes together. Supported uploads: PNG, JPEG, WebP and GIF (first frame).
