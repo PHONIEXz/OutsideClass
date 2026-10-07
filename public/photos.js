@@ -9,6 +9,7 @@ function database(){
   const request=indexedDB.open(DB_NAME,1);
   request.onupgradeneeded=()=>request.result.createObjectStore(STORE);
   request.onsuccess=()=>resolve(request.result);
+  request.onblocked=()=>reject(Error('Close other OutsideClass tabs, then reopen this card to load photos.'));
   request.onerror=()=>reject(Error('Photo storage is unavailable in this browser.'));
  });
 }
@@ -17,9 +18,12 @@ async function transact(id,method,value){
  return new Promise((resolve,reject)=>{
   const tx=db.transaction(STORE,method==='get'?'readonly':'readwrite');
   const request=method==='put'?tx.objectStore(STORE).put(value,id):tx.objectStore(STORE)[method](id);
-  request.onsuccess=()=>{if(method==='get')resolve(request.result||[]);};
-  tx.oncomplete=()=>{if(method!=='get')resolve();db.close();};
-  tx.onerror=()=>{db.close();reject(Error('Could not save the photo. Browser storage may be full.'));};
+  let result;
+  request.onsuccess=()=>{result=request.result;};
+  tx.oncomplete=()=>{resolve(method==='get'?(result||[]):undefined);db.close();};
+  const fail=()=>{db.close();reject(Error(method==='get'?'Could not load saved photos. Reopen this card to retry.':'Could not save the photo. Browser storage may be full.'));};
+  tx.onerror=fail;
+  tx.onabort=fail;
  });
 }
 export const readPhotos=id=>transact(id,'get');

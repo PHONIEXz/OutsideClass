@@ -27,7 +27,7 @@ User preferences are sent to Google when generating an activity. Saved reflectio
 3. Add `GEMMA_API_KEY` and `GEMMA_MODEL` in server environment variables, then deploy.
 4. Test a live generation, save its card, reload, and test the card offline on the deployed URL.
 
-This package is prepared for Vercel but has not been deployed or verified on Vercel. The source repository is https://github.com/PHONIEXz/OutsideClass . A hosted application URL is not yet available.
+The application is deployed at https://outsideclass-phoenix.vercel.app/ . The source repository is https://github.com/PHONIEXz/OutsideClass .
 
 Before widely publicizing live AI, configure provider quotas and a platform rate-limit rule for `/api/activity`. This prototype has no distributed abuse limiter or account system; a public endpoint can consume the key's quota. Browser button disabling is not a security boundary.
 
@@ -42,7 +42,7 @@ npm test
 npm run build
 ```
 
-Automated tests cover input bounds, model-output structure, missing credentials, and a mocked provider success. They do not establish live model quality or safety. Browser verification was attempted but blocked because the runtime browser was unavailable and its download failed. Mobile layout and offline behavior still need a real browser check. AI instructions constrain activities to nearby observation, but generated content still requires human judgment, especially for children.
+Automated tests cover input bounds, model-output structure, provider failures, group activities, access needs, weather, return visits and notebook/photo storage failures. They do not establish live model quality or safety. The deployed card and reflection controls have been checked in a browser. Photo upload, mobile layout and offline behavior still need end-to-end browser checks. AI instructions constrain activities to nearby observation, but generated content still requires human judgment, especially for children.
 
 ## Challenge preparation
 
@@ -73,3 +73,5 @@ Subscribe to `/updates.xml` with an RSS reader. To publish news, add an item wit
 Name a nearby spot while building a card. A field note can capture what was noticed, a possible explanation, an alternative and a question. From the notebook, “Return to this spot” uses up to 350 characters of each answer to ask Gemma for a new observation that compares with the first one. Earlier notes remain separate and are linked by their local ID. An optional named spot should be a nickname, not an address. Observations and notes stay on this device except when a user intentionally generates a return activity: then the four bounded answers are sent to the configured Gemma API.
 
 Each note can also keep up to two evidence photos in browser IndexedDB. The browser resizes them to at most 1200 px and 600 KB as JPEGs, stripping original metadata. They appear on reopened cards, in the notebook and on printouts. Photos are never sent to Gemma or the server. Browser storage limits can prevent a save; clearing browser data removes the photos and notes together. Supported uploads: PNG, JPEG, WebP and GIF (first frame).
+
+Photo saves reject aborted storage transactions. If saved photos cannot be read, the card prevents an update until it is reopened successfully. Failed notebook deletions keep their photos, and cards removed by the 100-card limit have their photos cleaned up.
