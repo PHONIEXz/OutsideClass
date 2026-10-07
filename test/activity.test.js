@@ -125,7 +125,7 @@ test('accepts full questions and bounds follow-up context independently',()=>{
  assert.throws(()=>validateInput({...solo,followUp:[]}));
  assert.match(promptFor(validateInput({...solo,followUp})),/Do not invent an unrelated outdoor exercise/);
 });
-const direct={title:'What a variable means',kind:'explanation',reason:'This programming idea is clearer through a code example than an outdoor task.',goal:'Understand named values.',explanation:'A variable is a name that refers to a value. In Python, score = 5 makes score refer to 5.',reflection:'What value could you give score next?',safety:'No outdoor task is required.',steps:[],materials:[]};
+const direct={checks:samples[0].checks,nextQuestion:'How do I change a value?',title:'What a variable means',kind:'explanation',reason:'This programming idea is clearer through a code example than an outdoor task.',goal:'Understand named values.',explanation:'A variable is a name that refers to a value. In Python, score = 5 makes score refer to 5.',reflection:'What value could you give score next?',safety:'No outdoor task is required.',steps:[],materials:[]};
 test('direct explanations have no invented activity steps and preserve their reason',()=>{
  assert.equal(parseActivity(JSON.stringify(direct)).kind,'explanation');
  assert.equal(parseActivity(JSON.stringify(samples[0])).kind,'activity');
@@ -135,5 +135,13 @@ test('provider returns a direct answer and original question with bounded follow
  const oldKey=process.env.GEMMA_API_KEY,oldFetch=global.fetch;process.env.GEMMA_API_KEY='test';
  global.fetch=async(url,init)=>{assert.match(JSON.parse(init.body).contents[0].parts[0].text,/earlier question and answer/);return{ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(direct)}]}}]})};};
  try{const r=response();await handler({method:'POST',body:{...solo,topic:'What is a variable in Python?',followUp:{question:'What is Python?',answer:'A programming language.'}}},r);assert.equal(r.code,200);assert.equal(r.data.activity.kind,'explanation');assert.equal(r.data.activity.topic,'What is a variable in Python?');assert.deepEqual(r.data.activity.steps,[]);}
+ finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
+});
+
+test('image questions use inline data but never echo image bytes into the saved card',async()=>{
+ const oldKey=process.env.GEMMA_API_KEY,oldFetch=global.fetch;process.env.GEMMA_API_KEY='test';
+ const image={mimeType:'image/jpeg',data:Buffer.from([255,216,255,224,0,1,255,217]).toString('base64')};
+ global.fetch=async(url,init)=>{const request=JSON.parse(init.body);assert.deepEqual(request.contents[0].parts[1].inlineData,image);assert.ok(!request.contents[0].parts[0].text.includes(image.data));return{ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(samples[0])}]}}]})};};
+ try{const r=response();await handler({method:'POST',body:{...solo,images:[image],imageConsent:true}},r);assert.equal(r.code,200);assert.equal(r.data.activity.imageUsed,true);assert.equal(r.data.activity.images,undefined);assert.ok(!JSON.stringify(r.data).includes(image.data));}
  finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
 });

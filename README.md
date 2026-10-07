@@ -72,7 +72,7 @@ Subscribe to `/updates.xml` with an RSS reader. To publish news, add an item wit
 
 Name a nearby spot while building a card. A field note can capture what was noticed, a possible explanation, an alternative and a question. From the notebook, “Return to this spot” uses up to 350 characters of each answer to ask Gemma for a new observation that compares with the first one. Earlier notes remain separate and are linked by their local ID. An optional named spot should be a nickname, not an address. Observations and notes stay on this device except when a user intentionally generates a return activity: then the four bounded answers are sent to the configured Gemma API.
 
-Each note can also keep up to two evidence photos in browser IndexedDB. The browser resizes them to at most 1200 px and 600 KB as JPEGs, stripping original metadata. They appear on reopened cards, in the notebook and on printouts. Photos are never sent to Gemma or the server. Browser storage limits can prevent a save; clearing browser data removes the photos and notes together. Supported uploads: PNG, JPEG, WebP and GIF (first frame).
+Each note can also keep up to two evidence photos in browser IndexedDB. The browser resizes them to at most 1200 px and 600 KB as JPEGs, stripping original metadata. They appear on reopened cards, in the notebook and on printouts. Notebook photos are not sent to Gemma or the server. Images deliberately selected in the question form are sent to Google AI only after the explicit consent checkbox is checked. Browser storage limits can prevent a save; clearing browser data removes the photos and notes together. Supported uploads: PNG, JPEG, WebP and GIF (first frame).
 
 Photo saves reject aborted storage transactions. If saved photos cannot be read, the card prevents an update until it is reopened successfully. Failed notebook deletions keep their photos, and cards removed by the 100-card limit have their photos cleaned up.
 
@@ -86,6 +86,18 @@ The card's “Your own images” section accepts up to two photos or sketches. U
 
 The learning form accepts a question or topic up to 600 characters. Suggested topics are optional. Gemma is asked to answer the actual question and choose between a safe, meaningful observation activity and a direct explanation. Explanations state why an outdoor task would not help, have no activity timer, and can still be saved with personal images. Classification and factual quality depend on the model; review responses before using them in class. Older saved cards remain compatible.
 
-“Ask a follow-up question” sends the earlier question and up to 1200 characters of its explanation along with the new question. The UI discloses this before submission; users can clear that context. Images are not included.
+“Ask a follow-up question” sends the earlier question and up to 1200 characters of its explanation along with the new question. The UI discloses this before submission; users can clear that context. Notebook images are not included in follow-up context. Users may separately select and consent to sending images with a question.
 
 When no built-in diagram matches, selected topics link to identified reference-image source pages (USGS water cycle and Commons solar system/unit fractions). Other questions offer a clearly labelled Commons browsing link without inventing a matching image. External references load only when clicked, require internet, and do not become offline attachments.
+
+## Learning workspace
+
+New AI responses request two understanding checks and a next learning question. The learner can retry checks and save the latest result with the card; notebook progress counts practice, reflections and return visits rather than claiming mastery. Young learner mode adjusts the prompt language. Existing cards without checks remain usable.
+
+The notebook exports JSON backups including saved JPEG photos, and imports validated backups without overwriting existing IDs or evicting cards. Imported photo writes are rolled back if the notebook cannot be committed. Downloads are not cloud backup: users must keep a copy themselves. Compare two saved cards side by side with observations, conditions and photos.
+
+Class activity packs contain the lesson without personal reflection, photos, prior observations or conversation context. Learners import the file into their notebook and can export their work, including notes and photos, for sharing themselves. This is file-based classroom exchange, not an account system, shared dashboard, formal grading or device sync.
+
+Selected question images are resized to JPEG and sent as inline data only after user consent. They are used to answer the question and then available locally on its card. Requests accept at most two 600 KB JPEGs. The key stays on the server and image bytes are excluded from API responses and logs. Upload question images do not automatically include other notebook photos. Model mistakes and unreadable images remain possible.
+
+The API adds per-instance burst protection (six requests per minute per forwarded connection in Vercel) and local development limits bodies to 2 MB. This is not distributed protection or a hard provider spend cap; provider quotas and a platform firewall remain necessary for wide public use. No paid services or billing settings were enabled.

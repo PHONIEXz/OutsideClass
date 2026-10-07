@@ -1,3 +1,5 @@
+import {scoreChecks,learningProgress} from '../public/learning.js';
+import {encodePhoto,makeBackup,restoreBackup,MAX_BACKUP_BYTES} from '../public/notebook-tools.js';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -15,7 +17,7 @@ function browser(saved=[],overrides={}){
   document:{getElementById:element,querySelectorAll:()=>[],addEventListener(){},body:{classList:{toggle(){}}}},
   window:{scrollTo(){},addEventListener(){}},location:{pathname:'/'},history:{pushState(){}},navigator:{},
   localStorage:{getItem:k=>stored.get(k)||null,setItem(k,v){if(failSave)throw Error('quota');stored.set(k,v);},removeItem:k=>stored.delete(k)},
-  samples,diagramHtml,safetyNotes:()=>[],MAX_PHOTOS:2,
+  samples,diagramHtml,scoreChecks,learningProgress,encodePhoto,makeBackup,restoreBackup,MAX_BACKUP_BYTES,safetyNotes:()=>[],MAX_PHOTOS:2,
   readPhotos:async()=>[],writePhotos:async(id,photos)=>writes.push({id,photos}),removePhotos:async id=>deleted.push(id),shrinkPhoto:async f=>f,...overrides};
  vm.runInNewContext(source+`\nglobalThis.api={render,persist,deleteNote,addPhotos,get notes(){return notes;},get current(){return current;},get load(){return photoLoad;},setPhotos(photos){photoDraft=photos;}};`,sandbox);
  return {api:sandbox.api,element,stored,deleted,writes,failSave:()=>{failSave=true;}};

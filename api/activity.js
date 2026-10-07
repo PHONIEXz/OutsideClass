@@ -1,4 +1,5 @@
 import {validateInput,parseActivity,promptFor} from '../lib/activity.js';
+import {allowRequest} from '../lib/limits.js';
 import {safetyNotes} from '../public/safety.js';
 
 // Never log prompts, model output, credentials or raw provider errors.
@@ -9,6 +10,7 @@ function fail(res, status, code, error) {
 export default async function handler(req,res) {
  res.setHeader('Cache-Control','no-store');
  if(req.method!=='POST') {res.setHeader('Allow','POST');return res.status(405).json({error:'Use POST.'});}
+ if(!allowRequest(req))return fail(res,429,'REQUEST_LIMIT','Too many requests from this connection. Wait a minute, then try again.');
  let input;try {input=validateInput(req.body);}catch(e){return res.status(400).json({error:e.message});}
  const key=process.env.GEMMA_API_KEY?.trim();
  if(!key) return fail(res,503,'AI_NOT_CONFIGURED','Live AI is not connected yet. Try a sample activity below.');
@@ -19,7 +21,7 @@ export default async function handler(req,res) {
  if(model.startsWith('gemma-4-')) generationConfig.thinkingConfig={thinkingLevel:'minimal'};
  let response,result;
  try {
-  response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{role:'user',parts:[{text:promptFor(input)}]}],generationConfig}),signal:AbortSignal.timeout(25000)});
+  response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{role:'user',parts:[{text:promptFor(input)},...(input.images||[]).map(image=>({inlineData:image}))]}],generationConfig}),signal:AbortSignal.timeout(25000)});
   if(!response.ok) {
    const errors={400:['AI_REQUEST_REJECTED','Google rejected the request. Check the configured model and API key restrictions.'],401:['AI_AUTH','Google rejected the API key. Check GEMMA_API_KEY in .env and restart the server.'],403:['AI_ACCESS','Google denied access. Check this key’s project permissions and model access.'],404:['AI_MODEL_NOT_FOUND','This Gemma model is unavailable for the API key. Check GEMMA_MODEL in .env.'],429:['AI_QUOTA','The AI usage limit was reached. Try a sample or come back later.']};
    const [code,message]=errors[response.status]||['AI_PROVIDER_UNAVAILABLE','Google’s AI service is unavailable. Try a sample or retry later.'];
@@ -37,7 +39,8 @@ export default async function handler(req,res) {
  const raw=Array.isArray(parts)?parts.filter(p=>p && !p.thought && typeof p.text==='string').map(p=>p.text).join(''):'';
  if(!raw.trim())return fail(res,502,'AI_EMPTY','Gemma returned no activity text. Please retry or choose a sample.');
  let activity;
- try{activity=parseActivity(raw,input.audience);}catch{return fail(res,502,'AI_ACTIVITY_FORMAT','Gemma replied, but the activity card was not in the required format. Please retry.');}
- return res.status(200).json({activity:{...activity,...input,source:`Gemma · ${model}`,beforeYouGo:safetyNotes(input)}});
+ try{activity=parseActivity(raw,input.audience);if(!activity.checks)throw Error('Missing understanding checks.');}catch{return fail(res,502,'AI_ACTIVITY_FORMAT','Gemma replied, but the activity card was not in the required format. Please retry.');}
+ const {images,...preferences}=input;
+ return res.status(200).json({activity:{...activity,...preferences,imageUsed:!!images?.length,source:`Gemma · ${model}`,beforeYouGo:safetyNotes(input)}});
 }
 
