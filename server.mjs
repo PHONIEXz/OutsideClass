@@ -1,5 +1,5 @@
 import http from 'node:http';import {readFile} from 'node:fs/promises';import handler from './api/activity.js';
-const files={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/sw.js':'sw.js','/samples.js':'samples.js','/outsideclass-logo.png':'outsideclass-logo.png'};
+const files={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/sw.js':'sw.js','/samples.js':'samples.js','/safety.js':'safety.js','/outsideclass-logo.png':'outsideclass-logo.png'};
 http.createServer(async(req,res)=>{
  res.status=n=>{res.statusCode=n;return res;};res.json=x=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(x));};
  const path=new URL(req.url,'http://localhost').pathname;

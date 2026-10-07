@@ -58,3 +58,22 @@ test('mocked provider returns a group card end to end',async()=>{
  try{const r=response();await handler({method:'POST',body:{...solo,audience:'Family',groupSize:3,ageRange:'5-7'}},r);assert.equal(r.code,200);assert.equal(r.data.activity.groupSize,3);assert.equal(r.data.activity.discussion.length,2);}
  finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
 });
+
+
+import {safetyNotes} from '../public/safety.js';
+test('window and seated requests remain in place and include deterministic precautions',()=>{
+ const input=validateInput({...solo,place:'By a window',mobility:'Seated',audience:'Class',groupSize:20,ageRange:'8-10'});
+ assert.match(promptFor(input),/indoors at a closed window/);
+ assert.match(promptFor(input),/without standing, walking/);
+ const notes=safetyNotes(input).join(' ');
+ assert.match(notes,/An adult leads/);
+ assert.match(notes,/Keep the window closed/);
+ assert.match(notes,/Stay seated/);
+ assert.throws(()=>validateInput({...solo,mobility:'Flying'}));
+});
+test('provider includes app-owned precautions for a window activity',async()=>{
+ const oldKey=process.env.GEMMA_API_KEY,oldFetch=global.fetch;process.env.GEMMA_API_KEY='test';
+ global.fetch=async()=>({ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(groupCard)}]}}]})});
+ try{const r=response();await handler({method:'POST',body:{...solo,place:'By a window',mobility:'Seated',audience:'Family',groupSize:3,ageRange:'5-7'}},r);assert.equal(r.code,200);assert.ok(r.data.activity.beforeYouGo.some(note=>note.includes('window closed')));assert.ok(r.data.activity.beforeYouGo.some(note=>note.includes('Stay seated')));}
+ finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
+});

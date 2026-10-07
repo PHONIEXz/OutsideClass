@@ -1,4 +1,5 @@
 import {validateInput,parseActivity,promptFor} from '../lib/activity.js';
+import {safetyNotes} from '../public/safety.js';
 
 // Never log prompts, model output, credentials or raw provider errors.
 function fail(res, status, code, error) {
@@ -37,5 +38,6 @@ export default async function handler(req,res) {
  if(!raw.trim())return fail(res,502,'AI_EMPTY','Gemma returned no activity text. Please retry or choose a sample.');
  let activity;
  try{activity=parseActivity(raw,input.audience);}catch{return fail(res,502,'AI_ACTIVITY_FORMAT','Gemma replied, but the activity card was not in the required format. Please retry.');}
- return res.status(200).json({activity:{...activity,...input,source:`Gemma · ${model}`}});
+ return res.status(200).json({activity:{...activity,...input,source:`Gemma · ${model}`,beforeYouGo:safetyNotes(input)}});
 }
+
