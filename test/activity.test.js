@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import {validateInput,parseActivity} from '../lib/activity.js';import {samples} from '../public/samples.js';import handler from '../api/activity.js';
-test('rejects invalid and unbounded inputs',()=>{for(const topic of ['',null,'a'.repeat(121)])assert.throws(()=>validateInput({topic,minutes:10,level:'Beginner',place:'Courtyard'}));assert.throws(()=>validateInput({topic:'Shadows',minutes:999,level:'Beginner',place:'Courtyard'}));});
+test('rejects invalid and unbounded inputs',()=>{for(const topic of ['',null,'a'.repeat(601)])assert.throws(()=>validateInput({topic,minutes:10,level:'Beginner',place:'Courtyard'}));assert.throws(()=>validateInput({topic:'Shadows',minutes:999,level:'Beginner',place:'Courtyard'}));});
 test('accepts fenced model JSON and rejects invalid structure',()=>{assert.equal(parseActivity('```json\n'+JSON.stringify(samples[0])+'\n```').title,samples[0].title);assert.throws(()=>parseActivity('{"title":"Hello"}'));});
 function response(){return{code:200,setHeader(){},status(n){this.code=n;return this;},json(x){this.data=x;return this;}};}
 test('missing key returns honest unavailable state',async()=>{const old=process.env.GEMMA_API_KEY;delete process.env.GEMMA_API_KEY;try{const r=response();await handler({method:'POST',body:{topic:'Light',minutes:10,level:'Beginner',place:'Courtyard'}},r);assert.equal(r.code,503);}finally{if(old)process.env.GEMMA_API_KEY=old;}});
@@ -113,5 +113,27 @@ test('provider uses prior evidence to request a fresh observation at the same sp
  const oldKey=process.env.GEMMA_API_KEY,oldFetch=global.fetch;process.env.GEMMA_API_KEY='test';
  global.fetch=async(url,init)=>{const prompt=JSON.parse(init.body).contents[0].parts[0].text;assert.match(prompt,/Small shadow/);assert.match(prompt,/Kitchen window/);assert.match(prompt,/test those ideas/);return{ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(samples[0])}]}}]})};};
  try{const r=response();await handler({method:'POST',body:{...solo,place:'By a window',spot:'Kitchen window',previous}},r);assert.equal(r.code,200);assert.equal(r.data.activity.spot,'Kitchen window');assert.deepEqual(r.data.activity.previous,previous);}
+ finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
+});
+
+test('accepts full questions and bounds follow-up context independently',()=>{
+ assert.equal(validateInput({...solo,topic:'Why '.repeat(120)}).topic.length,479);
+ const followUp={question:'What is recursion?',answer:'A function calling itself.'};
+ assert.deepEqual(validateInput({...solo,followUp}).followUp,followUp);
+ assert.throws(()=>validateInput({...solo,topic:'x'.repeat(601)}));
+ assert.throws(()=>validateInput({...solo,followUp:{...followUp,answer:'x'.repeat(1201)}}));
+ assert.throws(()=>validateInput({...solo,followUp:[]}));
+ assert.match(promptFor(validateInput({...solo,followUp})),/Do not invent an unrelated outdoor exercise/);
+});
+const direct={title:'What a variable means',kind:'explanation',reason:'This programming idea is clearer through a code example than an outdoor task.',goal:'Understand named values.',explanation:'A variable is a name that refers to a value. In Python, score = 5 makes score refer to 5.',reflection:'What value could you give score next?',safety:'No outdoor task is required.',steps:[],materials:[]};
+test('direct explanations have no invented activity steps and preserve their reason',()=>{
+ assert.equal(parseActivity(JSON.stringify(direct)).kind,'explanation');
+ assert.equal(parseActivity(JSON.stringify(samples[0])).kind,'activity');
+ for(const bad of [{...direct,reason:''},{...direct,steps:['Go outside']},{...direct,kind:'random'},{...samples[0],kind:'explanation'}])assert.throws(()=>parseActivity(JSON.stringify(bad)));
+});
+test('provider returns a direct answer and original question with bounded follow-up context',async()=>{
+ const oldKey=process.env.GEMMA_API_KEY,oldFetch=global.fetch;process.env.GEMMA_API_KEY='test';
+ global.fetch=async(url,init)=>{assert.match(JSON.parse(init.body).contents[0].parts[0].text,/earlier question and answer/);return{ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(direct)}]}}]})};};
+ try{const r=response();await handler({method:'POST',body:{...solo,topic:'What is a variable in Python?',followUp:{question:'What is Python?',answer:'A programming language.'}}},r);assert.equal(r.code,200);assert.equal(r.data.activity.kind,'explanation');assert.equal(r.data.activity.topic,'What is a variable in Python?');assert.deepEqual(r.data.activity.steps,[]);}
  finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
 });

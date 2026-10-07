@@ -77,3 +77,10 @@ test('an upload beyond the two-image limit is rejected without changing the save
  assert.match(b.element('photo-status').textContent,/up to two/);
  await b.api.persist(false);assert.equal(b.api.notes[0].photoCount,0);assert.equal(b.writes.length,0);
 });
+test('direct explanations render an answer, hide the activity timer trigger and keep uploads',()=>{
+ const b=browser();b.api.render({...samples[0],kind:'explanation',steps:[],materials:[],reason:'An explanation fits better.'});
+ const html=b.element('activity').innerHTML;
+ assert.match(html,/Here’s the explanation/);assert.match(html,/id="go" hidden/);
+ assert.ok(!html.includes('<h2>Bring along</h2>'));assert.match(html,/id="photo-input"/);assert.match(html,/id="ask-followup"/);
+ b.element('ask-followup').onclick();assert.match(b.element('followup-summary').textContent,/will be sent to Gemma/);assert.equal(b.element('topic').value,'');
+});
