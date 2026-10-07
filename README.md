@@ -81,3 +81,11 @@ Photo saves reject aborted storage transactions. If saved photos cannot be read,
 Cards about shadows/light, symmetry, biodiversity and plant parts/growth automatically include a labelled, curated SVG learning diagram. These are educational examples drawn by the website, not AI-generated images or recorded field evidence. Other topics continue to work without a diagram. Diagrams work offline, appear in printed cards and can be downloaded as SVGs.
 
 The card's “Your own images” section accepts up to two photos or sketches. Use Save card to keep images even before writing a reflection. Personal images remain in local browser storage.
+
+## Ask your own questions
+
+The learning form accepts a question or topic up to 600 characters. Suggested topics are optional. Gemma is asked to answer the actual question and choose between a safe, meaningful observation activity and a direct explanation. Explanations state why an outdoor task would not help, have no activity timer, and can still be saved with personal images. Classification and factual quality depend on the model; review responses before using them in class. Older saved cards remain compatible.
+
+“Ask a follow-up question” sends the earlier question and up to 1200 characters of its explanation along with the new question. The UI discloses this before submission; users can clear that context. Images are not included.
+
+When no built-in diagram matches, selected topics link to identified reference-image source pages (USGS water cycle and Commons solar system/unit fractions). Other questions offer a clearly labelled Commons browsing link without inventing a matching image. External references load only when clicked, require internet, and do not become offline attachments.

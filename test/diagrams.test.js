@@ -7,8 +7,8 @@ test('sample activities get relevant diagrams, with distinct concepts',()=>{
  assert.equal(learningDiagram({topic:'Plant growth'}).kind,'plants');
 });
 test('unsupported topics have no unrelated illustration and user text cannot become SVG markup',()=>{
- assert.equal(diagramHtml({topic:'Fractions'}),'');
- assert.equal(diagramHtml({topic:'Limelight politics'}),'');
+ assert.match(diagramHtml({topic:'Fractions'}),/Unit fractions/);
+ assert.match(diagramHtml({topic:'Limelight politics'}),/no matched illustration/);
  const html=diagramHtml({topic:'Shadows <script>alert(1)</script>',title:'<img onerror=bad>'});
  assert.ok(html.includes('data:image/svg+xml'));assert.ok(!html.includes('<script>'));assert.ok(!html.includes('onerror'));
 });

@@ -12,7 +12,19 @@ export function learningDiagram(activity){
  return kind?{...diagrams[kind],kind}:null;
 }
 export function diagramHtml(activity){
- const diagram=learningDiagram(activity);if(!diagram)return '';
+ const diagram=learningDiagram(activity);if(!diagram)return referenceHtml(activity);
  const image='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(diagram.svg);
  return `<figure class="learning-visual"><span class="eyebrow">LEARNING ILLUSTRATION</span><h2>${diagram.title}</h2><img src="${image}" alt="${diagram.caption}"><figcaption>${diagram.caption} This is an illustration, not your field evidence.</figcaption><a class="text-link" href="${image}" download="outsideclass-${diagram.kind}.svg">Download illustration</a></figure>`;
+}
+
+// Identified source pages keep their author/licence context and load only on click.
+const references=[
+ {matches:/\b(water cycle|evaporation|condensation|precipitation)\b/i,title:'The water cycle',source:'U.S. Geological Survey · Public domain',url:'https://www.usgs.gov/media/images/water-cycle-diagram-english',note:'A reference diagram showing water moving through the environment.'},
+ {matches:/\b(solar system|planets?)\b/i,title:'The solar system',source:'Herrera777 · Wikimedia Commons · CC BY-SA 4.0',url:'https://commons.wikimedia.org/wiki/File:Solar_System_diagram_(English).png',note:'Shows the major planets and asteroid belt. Sizes and distances are not to scale.'},
+ {matches:/\b(fractions?)\b/i,title:'Unit fractions',source:'BloomyFractal · Wikimedia Commons · CC BY-SA 4.0',url:'https://commons.wikimedia.org/wiki/File:Unit_fraction_representation.png',note:'A visual introduction to equal parts, from one whole to one twelfth.'}
+];
+export function referenceHtml(activity){
+ const topic=String(activity.topic||activity.title||'');const reference=references.find(r=>r.matches.test(topic));
+ if(!reference)return '<section class="reference-image"><h2>Need a reference picture?</h2><p class="hint">There is no matched illustration for this question yet. You can upload your own image or browse educational images. Check that any picture fits the idea you are learning.</p><a class="text-link" href="https://commons.wikimedia.org/wiki/Main_Page" target="_blank" rel="noopener noreferrer">Browse Wikimedia Commons images ↗</a></section>';
+ return `<section class="reference-image"><span class="eyebrow">EXTERNAL REFERENCE IMAGE</span><h2>${reference.title}</h2><p>${reference.note}</p><p class="hint">${reference.source}. This is a learning reference, not your field evidence. Opens another website and needs internet.</p><a class="text-link" href="${reference.url}" target="_blank" rel="noopener noreferrer">Open reference image and source ↗</a></section>`;
 }
