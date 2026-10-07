@@ -98,3 +98,19 @@ test('provider returns selected conditions and their precautions',async()=>{
  try{const r=response();await handler({method:'POST',body:{...solo,weather:'Windy',timeOfDay:'Midday'}},r);assert.equal(r.code,200);assert.equal(r.data.activity.weather,'Windy');assert.equal(r.data.activity.timeOfDay,'Midday');assert.ok(r.data.activity.beforeYouGo.some(n=>n.includes('trees')));assert.ok(r.data.activity.beforeYouGo.some(n=>n.includes('shade')));}
  finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
 });
+test('return visits use bounded observations and respect original access needs',()=>{
+ const previous={noticed:'The leaf shadows were short.',explanation:'Maybe it was midday.',alternative:'Maybe the branch moved.',question:'Will they be longer tomorrow?'};
+ const input=validateInput({...solo,place:'By a window',mobility:'Seated',spot:'Kitchen window',previous});
+ assert.equal(input.spot,'Kitchen window');assert.deepEqual(input.previous,previous);
+ const prompt=promptFor(input);assert.match(prompt,/return visit/);assert.match(prompt,/previously reported/);assert.match(prompt,/indoors at a closed window/);assert.match(prompt,/while seated/);
+ assert.throws(()=>validateInput({...solo,spot:'A'.repeat(61)}),/spot/);
+ assert.throws(()=>validateInput({...solo,previous:{...previous,noticed:'A'.repeat(351)}}),/previous/);
+ assert.throws(()=>validateInput({...solo,previous:{noticed:'x'}}),/previous/);
+});
+test('provider uses prior evidence to request a fresh observation at the same spot',async()=>{
+ const previous={noticed:'Small shadow',explanation:'The sun moved',alternative:'I moved',question:'Can I compare tomorrow?'};
+ const oldKey=process.env.GEMMA_API_KEY,oldFetch=global.fetch;process.env.GEMMA_API_KEY='test';
+ global.fetch=async(url,init)=>{const prompt=JSON.parse(init.body).contents[0].parts[0].text;assert.match(prompt,/Small shadow/);assert.match(prompt,/Kitchen window/);assert.match(prompt,/test those ideas/);return{ok:true,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:JSON.stringify(samples[0])}]}}]})};};
+ try{const r=response();await handler({method:'POST',body:{...solo,place:'By a window',spot:'Kitchen window',previous}},r);assert.equal(r.code,200);assert.equal(r.data.activity.spot,'Kitchen window');assert.deepEqual(r.data.activity.previous,previous);}
+ finally{global.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMMA_API_KEY;else process.env.GEMMA_API_KEY=oldKey;}
+});

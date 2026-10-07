@@ -67,3 +67,7 @@ MIT-licensed application source. Gemma model usage remains subject to Google's a
 Home (`/`), activities (`/learn`), notebook (`/notebook`), guides (`/guides`) and updates (`/updates`) have direct URLs and browser history navigation. Activity timers support pause, resume and recovery after refresh using device-local timestamps; they do not provide a background alarm.
 
 Subscribe to `/updates.xml` with an RSS reader. To publish news, add an item with a unique GUID to `public/updates.xml` and a matching article to the Updates page in `public/index.html`. Email subscription is not configured and no email addresses are collected.
+
+## Same Spot Experiment and Evidence Trails
+
+Name a nearby spot while building a card. A field note can capture what was noticed, a possible explanation, an alternative and a question. From the notebook, “Return to this spot” uses up to 350 characters of each answer to ask Gemma for a new observation that compares with the first one. Earlier notes remain separate and are linked by their local ID. An optional named spot should be a nickname, not an address. Observations and notes stay on this device except when a user intentionally generates a return activity: then the four bounded answers are sent to the configured Gemma API.
