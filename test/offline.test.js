@@ -112,6 +112,7 @@ test("offline installation includes every page and imported browser module", asy
     "/photos.js",
     "/learning.js",
     "/profile.js",
+    "/feed.js",
     "/notebook-tools.js",
     "/diagrams.js",
     "/samples.js",

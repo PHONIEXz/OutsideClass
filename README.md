@@ -30,6 +30,8 @@ Open <http://localhost:3000>. There are no application dependencies to install. 
 
 ## How the AI works
 
+The assistant is named **OutsideClass AI** in the interface. It is powered by Google-hosted Gemma models; the name does not imply that OutsideClass trained its own model. Google remains the processor for submitted questions and consented images.
+
 Copy `.env.example` to `.env`, set `GEMMA_API_KEY` to your Google AI Studio API key, and set `GEMMA_MODEL` to a Gemma model available to your account. Restart the server. Keep `.env` out of version control; the key is used only on the server.
 
 The starting configuration uses `gemma-4-26b-a4b-it` through Google's Gemini API. The API is the hosting interface; the requested model is Gemma. See [Google's Gemma API documentation](https://ai.google.dev/gemma/docs/core/gemma_on_gemini_api) for availability and terms.
@@ -59,7 +61,7 @@ npm test
 npm run build
 ```
 
-As of 8 October 2026, all 66 automated tests and syntax checks pass. Tests cover validation, provider failures, safety context, storage failures, consent, scoring, backup rollback, timer recovery and per-instance rate limiting. Live browser checks verified practice scoring, saved progress, notebook download, duplicate-safe import and photo evidence. A live image question returned a relevant description and two practice checks. These show functioning flows, not guaranteed factual accuracy or child safety.
+As of 8 October 2026, all 72 automated tests and syntax checks pass. Tests cover validation, provider failures, safety context, storage failures, consent, scoring, backup rollback, timer recovery and per-instance rate limiting. Live browser checks verified practice scoring, saved progress, notebook download, duplicate-safe import and photo evidence. A live image question returned a relevant description and two practice checks. These show functioning flows, not guaranteed factual accuracy or child safety.
 
 A subsequent desktop keyboard pass reached every generation control in order and submitted a live Gemma question. Restoring a backup into an empty browser notebook recovered two cards, a reflection, practice scores and both evidence photos. Physical-phone testing, full offline recovery, a complete accessibility audit and a real outdoor lesson remain launch requirements. Real-world observations should come from learners, not generated examples.
 
@@ -80,6 +82,12 @@ Before broad public use, configure Google quota controls and platform rate limit
 | `test/`           | Node built-in tests                                                |
 
 MIT-licensed application source. Gemma usage is subject to Google's applicable model and service terms.
+
+## Publish an update
+
+The Updates page has search, Product/Fixes/Learning tips categories, full-post sections and copyable links. RSS subscriptions use a feed reader; copying the address alone is not a subscription, and no email or push alerts are sent.
+
+Edit `public/updates.json` to add a post with a unique, permanent `id`, title, UTC `publishedAt`, category, summary and body paragraphs. An optional action can link to an existing app page. Keep published IDs unchanged so existing RSS readers recognize the same posts. Run `npm run updates` or `npm run build` to generate both the page and `/updates.xml`, then commit the JSON and generated files together. Run `npm test` to check feed consistency. Learning tips are suggestions, not fabricated reports of outdoor lessons.
 
 ## Web launch verification
 

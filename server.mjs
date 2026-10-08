@@ -14,6 +14,7 @@ const files = {
   "/sw.js": "sw.js",
   "/learning.js": "learning.js",
   "/profile.js": "profile.js",
+  "/feed.js": "feed.js",
   "/notebook-tools.js": "notebook-tools.js",
   "/diagrams.js": "diagrams.js",
   "/photos.js": "photos.js",

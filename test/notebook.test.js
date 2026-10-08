@@ -11,6 +11,7 @@ import { readFile } from "node:fs/promises";
 import vm from "node:vm";
 import { diagramHtml } from "../public/diagrams.js";
 import { samples } from "../public/samples.js";
+import { matchesUpdate } from "../public/feed.js";
 import { readProfile, saveProfile, clearProfile } from "../public/profile.js";
 
 // Run the real UI handlers with controlled browser storage failures.
@@ -80,6 +81,7 @@ function browser(saved = [], overrides = {}) {
       },
     },
     samples,
+    matchesUpdate,
     readProfile,
     saveProfile,
     clearProfile,
@@ -256,7 +258,7 @@ test("direct explanations render an answer, hide the activity timer trigger and 
   b.element("ask-followup").onclick();
   assert.match(
     b.element("followup-summary").textContent,
-    /will be sent to Gemma/,
+    /will be sent to OutsideClass AI/,
   );
   assert.equal(b.element("topic").value, "");
 });
@@ -500,4 +502,14 @@ test("profile name and role never enter AI requests or downloaded learner work",
   const exported = await b.exports[0].blob.text();
   assert.ok(!exported.includes("PrivateNickname123"));
   assert.ok(!exported.includes('"role":"Teacher"'));
+});
+
+test("older saved AI cards display OutsideClass AI while keeping their stored attribution", () => {
+  const activity = { ...samples[0], source: "Gemma · gemma-4-26b-a4b-it" };
+  const saved = { ...note("saved", 0), activity };
+  const b = browser([saved]);
+  b.api.render(activity, "saved");
+  assert.match(b.element("activity").innerHTML, /OutsideClass AI/);
+  assert.ok(!b.element("activity").innerHTML.includes("Gemma ·"));
+  assert.equal(b.api.notes[0].activity.source, activity.source);
 });
