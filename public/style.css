@@ -79,6 +79,44 @@ main {
   margin: 0 auto;
   padding: 52px 0 60px;
 }
+.local-profile {
+  margin-bottom: 32px;
+  padding: 18px 22px;
+  border: 1px solid #cbd5c8;
+  border-radius: 8px;
+  background: #edf1e7;
+}
+.profile-welcome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+#profile-greeting {
+  font-size: 20px;
+  font-family: Georgia, serif;
+  margin: 0;
+}
+.local-profile form {
+  max-width: 620px;
+  padding: 16px 0 0;
+  background: transparent;
+}
+.local-profile summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.local-profile .hint {
+  line-height: 1.6;
+}
+#profile-status:empty {
+  display: none;
+}
+@media print {
+  .local-profile {
+    display: none;
+  }
+}
 .eyebrow,
 .section-label {
   font-size: 12px;

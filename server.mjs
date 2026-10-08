@@ -13,6 +13,7 @@ const files = {
   "/style.css": "style.css",
   "/sw.js": "sw.js",
   "/learning.js": "learning.js",
+  "/profile.js": "profile.js",
   "/notebook-tools.js": "notebook-tools.js",
   "/diagrams.js": "diagrams.js",
   "/photos.js": "photos.js",

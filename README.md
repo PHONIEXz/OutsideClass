@@ -38,6 +38,8 @@ The server validates bounded inputs, applies a timeout, requests structured outp
 
 ## Privacy and saved work
 
+Choose an optional first name or nickname and Learner, Teacher or Parent role in the local profile panel. It personalizes your greeting and notebook label without a login, phone number or verification code. These preferences stay in this browser, are not sent to AI, and are excluded from notebook downloads. You can edit or clear the profile without deleting your learning work. It is not an account: anyone using the browser can change it, and it provides no identity verification, device sync or recovery.
+
 Generating a card sends your question and choices to Google, including a spot nickname if supplied. Follow-ups send the displayed earlier question and answer; return visits send the displayed observation context. Use nicknames rather than addresses or personal details. Selected question images are sent only after consent and are resized to JPEG first.
 
 Saved cards and reflections live in this browser's localStorage; evidence photos live in IndexedDB. Notebook photos are not automatically sent to the model. No account, GPS, camera or microphone access is required.
@@ -57,7 +59,7 @@ npm test
 npm run build
 ```
 
-As of 8 October 2026, all 61 automated tests and syntax checks pass. Tests cover validation, provider failures, safety context, storage failures, consent, scoring, backup rollback, timer recovery and per-instance rate limiting. Live browser checks verified practice scoring, saved progress, notebook download, duplicate-safe import and photo evidence. A live image question returned a relevant description and two practice checks. These show functioning flows, not guaranteed factual accuracy or child safety.
+As of 8 October 2026, all 66 automated tests and syntax checks pass. Tests cover validation, provider failures, safety context, storage failures, consent, scoring, backup rollback, timer recovery and per-instance rate limiting. Live browser checks verified practice scoring, saved progress, notebook download, duplicate-safe import and photo evidence. A live image question returned a relevant description and two practice checks. These show functioning flows, not guaranteed factual accuracy or child safety.
 
 A subsequent desktop keyboard pass reached every generation control in order and submitted a live Gemma question. Restoring a backup into an empty browser notebook recovered two cards, a reflection, practice scores and both evidence photos. Physical-phone testing, full offline recovery, a complete accessibility audit and a real outdoor lesson remain launch requirements. Real-world observations should come from learners, not generated examples.
 
