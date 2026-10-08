@@ -201,7 +201,11 @@ function view(id) {
 function navigate(id) {
   if (id === "notebook") notebook();
   else if (id === "activity") {
-    if (current) render(current.activity, current.id);
+    if (current && $("reflection-noticed")) {
+      // Other pages hide this card. Keep its unsaved text, answers and photos.
+      view("activity");
+      showPhotos();
+    } else if (current) render(current.activity, current.id);
     else if (session?.activity) render(session.activity, session.id);
     else view("builder");
   } else view(id);
@@ -341,6 +345,11 @@ async function persist(requireReflection) {
       "Answer at least one reflection prompt first.";
     return false;
   }
+  if (!card.id && notes.length >= 100) {
+    $("saved-status").textContent =
+      "Your notebook has 100 cards. Download a backup, then delete a card you no longer need before saving this one. Your existing work has been kept.";
+    return false;
+  }
   const old = notes.slice(),
     id = card.id || crypto.randomUUID(),
     photos = photoDraft.slice();
@@ -405,6 +414,11 @@ function deleteNote(id) {
 }
 $("form").onsubmit = async (e) => {
   e.preventDefault();
+  if (navigator.onLine === false) {
+    $("status").textContent =
+      "You’re offline. Use a sample or reopen a saved card. AI questions need an internet connection.";
+    return;
+  }
   if (questionImageBusy) return;
   if (questionImages.length && !$("image-consent").checked) {
     $("status").textContent =
@@ -575,7 +589,12 @@ function notebook() {
             )
             .join("");
       })
-      .catch(() => {});
+      .catch(() => {
+        const target = $("photos-" + n.id);
+        if (target && !$("notebook").hidden)
+          target.textContent =
+            "Saved photos could not be loaded. Reopen this card to retry.";
+      });
   document.querySelectorAll("[data-open]").forEach(
     (b) =>
       (b.onclick = () => {
@@ -600,15 +619,33 @@ function notebook() {
   );
 }
 $("count").textContent = notes.length;
+let offlineReady = false;
+function updateConnection() {
+  $("offline").textContent =
+    navigator.onLine === false
+      ? "Offline · use samples and saved cards. AI needs internet."
+      : offlineReady
+        ? "Cards & samples available offline after this visit."
+        : "Preparing offline access…";
+}
+window.addEventListener("online", updateConnection);
+window.addEventListener("offline", updateConnection);
+updateConnection();
 if ("serviceWorker" in navigator)
   navigator.serviceWorker
     .register("/sw.js")
     .then(() => navigator.serviceWorker.ready)
     .then(() => {
-      $("offline").textContent =
-        "Cards & samples available offline after this visit.";
+      offlineReady = true;
+      updateConnection();
     })
-    .catch(() => {});
+    .catch(() => {
+      $("offline").textContent =
+        "Offline access could not be prepared. Keep a notebook backup.";
+    });
+else
+  $("offline").textContent =
+    "Offline pages are unavailable in this browser. Keep a notebook backup.";
 
 // Timestamp-based sessions keep accurate elapsed time when a tab is suspended.
 let session = null;
@@ -884,7 +921,7 @@ async function downloadCard(lesson) {
   if (current !== card || photoBusy || photoLoadFailed) return;
   try {
     const id = crypto.randomUUID();
-    const { previous, followUp, previousId, spot, ...publicLesson } =
+    const { previous, followUp, previousId, spot, workLabel, ...publicLesson } =
       card.activity;
     const label = lesson
       ? ""
@@ -908,6 +945,7 @@ async function downloadCard(lesson) {
       reflectionAnswers: lesson ? {} : readReflection(),
       spot: activity.spot || "",
       previousId: lesson ? null : card.id,
+      checkResult: lesson ? null : checkResult,
       date: new Date().toISOString(),
       photos: lesson ? [] : await Promise.all(photoDraft.map(encodePhoto)),
     };

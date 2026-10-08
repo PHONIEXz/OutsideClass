@@ -42,7 +42,7 @@ Generating a card sends your question and choices to Google, including a spot ni
 
 Saved cards and reflections live in this browser's localStorage; evidence photos live in IndexedDB. Notebook photos are not automatically sent to the model. No account, GPS, camera or microphone access is required.
 
-Clearing browser data can erase your notebook. Storage is device-local and capped at 100 cards; saving beyond that replaces the oldest card. Download a backup to keep a separate copy. Backups and learner work exports include notes and photos, so share them deliberately. Imports add missing IDs without overwriting existing cards or evicting cards. Activity packs exclude personal reflections, photos and previous conversation context.
+Clearing browser data can erase your notebook. Storage is device-local and capped at 100 cards; new cards are refused at the limit so existing work is kept. Back up your notebook before deleting cards to make room. Download a backup to keep a separate copy. Backups and learner work exports include notes and photos, so share them deliberately. Imports add missing IDs without overwriting existing cards or evicting cards. Activity packs exclude personal reflections, photos and previous conversation context.
 
 ## Offline use and mobile
 
@@ -78,3 +78,7 @@ Before broad public use, configure Google quota controls and platform rate limit
 | `test/`           | Node built-in tests                                                |
 
 MIT-licensed application source. Gemma usage is subject to Google's applicable model and service terms.
+
+## Web launch verification
+
+See [the verification record](docs/web-launch-verification.md) for automated coverage, the manual browser checks, and the remaining account/device steps. The API can be paused without disabling saved work by setting server-only `GEMMA_DISABLED=1` and redeploying. This stops provider calls; it is an emergency control, not a quota cap.

@@ -13,13 +13,22 @@ export default async function handler(req, res) {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Use POST." });
   }
-  if (!allowRequest(req))
+  if (process.env.GEMMA_DISABLED === "1")
+    return fail(
+      res,
+      503,
+      "AI_PAUSED",
+      "AI questions are temporarily paused. You can still use samples and your saved notebook.",
+    );
+  if (!allowRequest(req)) {
+    res.setHeader("Retry-After", "60");
     return fail(
       res,
       429,
       "REQUEST_LIMIT",
       "Too many requests from this connection. Wait a minute, then try again.",
     );
+  }
   let input;
   try {
     input = validateInput(req.body);
@@ -169,15 +178,13 @@ export default async function handler(req, res) {
     );
   }
   const { images, ...preferences } = input;
-  return res
-    .status(200)
-    .json({
-      activity: {
-        ...activity,
-        ...preferences,
-        imageUsed: !!images?.length,
-        source: `Gemma · ${model}`,
-        beforeYouGo: safetyNotes(input),
-      },
-    });
+  return res.status(200).json({
+    activity: {
+      ...activity,
+      ...preferences,
+      imageUsed: !!images?.length,
+      source: `Gemma · ${model}`,
+      beforeYouGo: safetyNotes(input),
+    },
+  });
 }

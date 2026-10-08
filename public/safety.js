@@ -3,12 +3,16 @@ export function safetyNotes(activity = {}) {
   const notes = [
     "Choose a safe spot away from traffic, edges and water. Stop if the weather or place feels unsafe.",
     "Observe without tasting anything or touching unknown plants, insects or animals. Do not climb or look at the sun.",
+    "Use familiar, unbreakable materials. Do not handle loose glass or sharp objects.",
   ];
   if (activity.audience === "Class" || activity.audience === "Family")
     notes.unshift(
       "An adult leads: agree boundaries, keep everyone in sight, and count the group before and after.",
     );
-  else if (activity.ageRange && activity.ageRange !== "Adults")
+  else if (
+    activity.learnerStage === "Young learner" ||
+    (activity.ageRange && activity.ageRange !== "Adults")
+  )
     notes.unshift("A child needs an adult nearby throughout the activity.");
   if (activity.place === "By a window")
     notes.push(
