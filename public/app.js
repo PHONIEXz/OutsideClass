@@ -1,5 +1,6 @@
 import { scoreChecks, learningProgress } from "./learning.js";
 import { readProfile, saveProfile, clearProfile } from "./profile.js";
+import { matchesUpdate } from "./feed.js";
 import {
   encodePhoto,
   makeBackup,
@@ -211,6 +212,47 @@ const esc = (x) =>
         c
       ],
   );
+function updateFeed() {
+  const posts = Array.from(document.querySelectorAll("[data-category]"));
+  let shown = 0;
+  for (const post of posts) {
+    post.hidden = !matchesUpdate(
+      { category: post.dataset.category, text: post.textContent },
+      $("update-category").value,
+      $("update-search").value,
+    );
+    if (!post.hidden) shown++;
+  }
+  $("update-count").textContent = `${shown} of ${posts.length} updates`;
+  $("update-empty").hidden = shown !== 0;
+}
+$("update-search").oninput = updateFeed;
+$("update-category").onchange = updateFeed;
+document.querySelectorAll("[data-copy-update]").forEach((button) => {
+  button.onclick = async () => {
+    const url = `https://outsideclass-phoenix.vercel.app/updates#${button.dataset.copyUpdate}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      $("feed-status").textContent =
+        "Update link copied. Share it wherever you choose.";
+    } catch {
+      $("feed-status").textContent = `Copy this update link: ${url}`;
+    }
+  };
+});
+function openUpdateHash() {
+  if (location.pathname !== "/updates" || !location.hash) return;
+  const post = document.getElementById(location.hash.slice(1));
+  if (!post?.dataset?.category) return;
+  $("update-search").value = "";
+  $("update-category").value = "All updates";
+  updateFeed();
+  post.querySelector("details")?.setAttribute("open", "");
+  post.scrollIntoView({ block: "start" });
+  post.focus({ preventScroll: true });
+}
+window.addEventListener("hashchange", openUpdateHash);
+updateFeed();
 function groupHtml(a) {
   if (
     !a.audience ||
@@ -326,7 +368,7 @@ function render(a, id = null) {
   current = { activity: structuredClone(a), id };
   view("activity");
   $("activity").innerHTML =
-    `<article class="card"><span class="eyebrow">${direct ? "YOUR LEARNING ANSWER" : "YOUR FIELD CARD"}</span><h1>${esc(a.title)}</h1><span class="tag">${direct ? "EXPLANATION" : esc(a.minutes) + " MIN"} · ${esc(a.level)}</span><p>${esc(a.goal)}</p><details class="your-question"><summary>Your question</summary><p>${esc(a.topic || a.title)}</p></details>${direct ? `<section class="direct-answer"><h2>Here’s the explanation</h2><p>${esc(a.explanation)}</p><p class="hint">${esc(a.reason)}</p></section>` : ""}<p class="hint">${esc(a.source)} · ${esc(a.place)}${a.weather && a.weather !== "Any" ? " · " + esc(a.weather) : ""}${a.timeOfDay && a.timeOfDay !== "Any" ? " · " + esc(a.timeOfDay) : ""}</p>${a.spot ? `<p class="spot-label">Your spot: <strong>${esc(a.spot)}</strong>${a.previous ? " · Return visit" : ""}</p>` : ""}${a.previous ? `<div class="evidence-recall"><strong>Last time you noticed</strong><p>${esc(a.previous.noticed || "Your earlier reflection")}</p><small>Compare what you find today. Your earlier notes are observations, not confirmed facts.</small></div>` : ""}${diagramHtml(a)}<section class="attachments" aria-label="Your image attachments"><h2>Your own images</h2><label for="photo-input">Upload photos or sketches (optional, up to two)</label><input id="photo-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple><p class="hint">Choose PNG, JPEG, WebP or GIF, up to 12 MB each. Images stay in this browser and are not sent to Gemma. Use Save card to keep them, with or without a reflection.</p><div id="photo-preview" class="photo-strip"></div><p id="photo-status" role="status"></p></section>${
+    `<article class="card"><span class="eyebrow">${direct ? "YOUR LEARNING ANSWER" : "YOUR FIELD CARD"}</span><h1>${esc(a.title)}</h1><span class="tag">${direct ? "EXPLANATION" : esc(a.minutes) + " MIN"} · ${esc(a.level)}</span><p>${esc(a.goal)}</p><details class="your-question"><summary>Your question</summary><p>${esc(a.topic || a.title)}</p></details>${direct ? `<section class="direct-answer"><h2>Here’s the explanation</h2><p>${esc(a.explanation)}</p><p class="hint">${esc(a.reason)}</p></section>` : ""}<p class="hint">${esc(/^Gemma\b/.test(a.source) ? "OutsideClass AI" : a.source)} · ${esc(a.place)}${a.weather && a.weather !== "Any" ? " · " + esc(a.weather) : ""}${a.timeOfDay && a.timeOfDay !== "Any" ? " · " + esc(a.timeOfDay) : ""}</p>${a.spot ? `<p class="spot-label">Your spot: <strong>${esc(a.spot)}</strong>${a.previous ? " · Return visit" : ""}</p>` : ""}${a.previous ? `<div class="evidence-recall"><strong>Last time you noticed</strong><p>${esc(a.previous.noticed || "Your earlier reflection")}</p><small>Compare what you find today. Your earlier notes are observations, not confirmed facts.</small></div>` : ""}${diagramHtml(a)}<section class="attachments" aria-label="Your image attachments"><h2>Your own images</h2><label for="photo-input">Upload photos or sketches (optional, up to two)</label><input id="photo-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple><p class="hint">Choose PNG, JPEG, WebP or GIF, up to 12 MB each. Images stay in this browser and are not sent to OutsideClass AI. Use Save card to keep them, with or without a reflection.</p><div id="photo-preview" class="photo-strip"></div><p id="photo-status" role="status"></p></section>${
       direct
         ? ""
         : `<h2>Bring along</h2><p>${a.materials.map(esc).join(", ") || "Just your curiosity."}</p><h2>${["By a window", "From a doorway"].includes(a.place) ? "Explore from your spot" : "Try this outside"}</h2><ol>${a.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol><section class="safety-check"><h2>Before you begin</h2><ul>${safetyNotes(
@@ -577,7 +619,7 @@ function updateRevisit() {
   const entry = notes.find((n) => n.id === revisitId);
   $("revisit-context").hidden = !entry;
   $("revisit-summary").textContent = entry
-    ? `From ${entry.spot}: ${previousFor(entry).noticed.slice(0, 160)} Your earlier answers will be sent to Gemma to make the next activity.`
+    ? `From ${entry.spot}: ${previousFor(entry).noticed.slice(0, 160)} Your earlier answers will be sent to OutsideClass AI (processed by Google) to make the next activity.`
     : "";
 }
 function updateFollowUp() {
@@ -585,7 +627,7 @@ function updateFollowUp() {
   $("followup-summary").textContent = followUp
     ? "Following up on: " +
       followUp.question +
-      " Your earlier question and answer will be sent to Gemma."
+      " Your earlier question and answer will be sent to OutsideClass AI (processed by Google)."
     : "";
 }
 $("clear-followup").onclick = () => {
@@ -874,6 +916,7 @@ updateTimer();
 navigate(
   Object.keys(routes).find((id) => routes[id] === location.pathname) || "home",
 );
+openUpdateHash();
 
 function checkHtml(a) {
   if (!Array.isArray(a.checks)) return "";

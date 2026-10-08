@@ -1,0 +1,119 @@
+[
+  {
+    "id": "outsideclass-updates-feed-20261008",
+    "title": "Your updates, easier to follow",
+    "publishedAt": "2026-10-08T16:15:52Z",
+    "category": "Product",
+    "summary": "Browse product news, fixes and learning tips. Search the feed, copy a link to an update or subscribe through RSS.",
+    "body": [
+      "OutsideClass AI is now the name of our learning assistant in the interface. It uses Google-hosted Gemma models; questions and consented images are still processed by Google.",
+      "The website and RSS feed now come from the same published posts, so readers see the same titles, dates and information in both places."
+    ],
+    "action": {
+      "label": "Explore with OutsideClass AI",
+      "path": "/learn"
+    }
+  },
+  {
+    "id": "outsideclass-evidence-tip-20261008",
+    "title": "One observation. Two possible explanations.",
+    "publishedAt": "2026-10-08T16:15:52Z",
+    "category": "Learning tips",
+    "summary": "Before deciding why something happened, write what you actually noticed and consider a second explanation.",
+    "body": [
+      "Try describing a leaf, a tile or a shadow without guessing its cause. Then write one possible explanation and another that could also fit what you saw.",
+      "Choose one safe observation that could help you tell those explanations apart. If you cannot test them today, save the question for your next visit. This is a learning suggestion, not a report of a completed outdoor lesson."
+    ],
+    "action": {
+      "label": "Open your notebook",
+      "path": "/notebook"
+    }
+  },
+  {
+    "id": "outsideclass-rainy-day-tip-20261008",
+    "title": "A rainy day can still be a learning day",
+    "publishedAt": "2026-10-08T16:15:52Z",
+    "category": "Learning tips",
+    "summary": "Choose a closed window or a seated activity when conditions outside are unsafe.",
+    "body": [
+      "Select By a window, From a seat and Rainy in Activities. Use a safe indoor view or familiar, unbreakable objects. Keep windows closed and do not lean out.",
+      "You can compare shapes or count visible patterns without going outside. An adult should review activities for children; stop if the place or conditions feel unsafe."
+    ],
+    "action": {
+      "label": "Choose an activity",
+      "path": "/learn"
+    }
+  },
+  {
+    "id": "outsideclass-local-profile-20261008",
+    "title": "A name for your learning journey",
+    "publishedAt": "2026-10-08T15:45:04Z",
+    "category": "Product",
+    "summary": "Choose a nickname and optional role for a personal greeting and notebook label. No login, phone number or code. Profiles stay local, outside AI requests and downloaded work.",
+    "body": []
+  },
+  {
+    "id": "outsideclass-web-recovery-20261008",
+    "title": "Keep your discoveries safe",
+    "publishedAt": "2026-10-08T14:45:00Z",
+    "category": "Fixes",
+    "summary": "Refreshed offline pages, full-notebook protection, draft preservation, practice results in learner work exports, and clearer small-screen controls.",
+    "body": []
+  },
+  {
+    "id": "outsideclass-learning-workspace-20261007",
+    "title": "Backups, learning checks and image questions",
+    "publishedAt": "2026-10-07T20:45:00Z",
+    "category": "Product",
+    "summary": "Back up and restore your notebook with photos, practise with understanding checks, compare discoveries, exchange class packs and optionally ask about selected images with explicit consent.",
+    "body": []
+  },
+  {
+    "id": "outsideclass-freeform-questions-20261007",
+    "title": "Ask your own questions and follow up",
+    "publishedAt": "2026-10-07T20:00:00Z",
+    "category": "Product",
+    "summary": "Ask a learning question up to 600 characters. Get an observation activity when it fits, or a direct explanation, and ask a follow-up. Selected topics include external reference-image sources.",
+    "body": []
+  },
+  {
+    "id": "outsideclass-diagrams-uploads-20261007",
+    "title": "Learning diagrams and your own image attachments",
+    "publishedAt": "2026-10-07T19:40:00Z",
+    "category": "Product",
+    "summary": "Supported topics include downloadable learning diagrams. Attach up to two personal photos or sketches from the top of each card and save them locally, even before writing a reflection.",
+    "body": []
+  },
+  {
+    "id": "outsideclass-evidence-trails-20261007",
+    "title": "Return to the same spot with an evidence trail",
+    "publishedAt": "2026-10-07T14:30:00Z",
+    "category": "Product",
+    "summary": "Name a spot, record an observation and two possible explanations, then return to check what changed. OutsideClass AI builds a fresh activity from your earlier note.",
+    "body": []
+  },
+  {
+    "id": "outsideclass-pages-timer-20261007",
+    "title": "A place for your whole learning journey",
+    "publishedAt": "2026-10-07T14:20:00Z",
+    "category": "Product",
+    "summary": "Explore dedicated activity, notebook and guide pages. Use the new activity timer with pause, resume and reflection. Group activities, accessible spaces and manual weather choices help fit learning to your day.",
+    "body": []
+  },
+  {
+    "id": "outsideclass-reflections-20261007",
+    "title": "Three prompts for better reflections",
+    "publishedAt": "2026-10-07T14:15:00Z",
+    "category": "Product",
+    "summary": "Record what you noticed, what surprised you and one question you still have. Existing notebook entries remain readable.",
+    "body": []
+  },
+  {
+    "id": "outsideclass-group-learning-20261007",
+    "title": "More ways to learn together",
+    "publishedAt": "2026-10-07T14:20:00Z",
+    "category": "Product",
+    "summary": "Family and class activities include leader guidance and discussion questions. Choose a seat, window or doorway, and match activities to weather and time of day.",
+    "body": []
+  }
+]

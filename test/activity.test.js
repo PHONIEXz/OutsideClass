@@ -105,6 +105,7 @@ test("mocked successful provider response uses Gemma and strips unknown fields",
     );
     assert.equal(r.code, 200);
     assert.equal(r.data.activity.untrusted, undefined);
+    assert.equal(r.data.activity.source, "OutsideClass AI");
   } finally {
     global.fetch = fetchOld;
     if (old) process.env.GEMMA_API_KEY = old;

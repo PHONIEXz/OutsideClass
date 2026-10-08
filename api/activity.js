@@ -93,7 +93,7 @@ export default async function handler(req, res) {
         ],
         404: [
           "AI_MODEL_NOT_FOUND",
-          "This Gemma model is unavailable for the API key. Check GEMMA_MODEL in .env.",
+          "OutsideClass AI is unavailable with the current model configuration. Try a sample while this is checked.",
         ],
         429: [
           "AI_QUOTA",
@@ -123,7 +123,7 @@ export default async function handler(req, res) {
         res,
         504,
         "AI_TIMEOUT",
-        "Gemma did not finish within 25 seconds. Please retry or use a sample.",
+        "OutsideClass AI did not finish within 25 seconds. Please retry or use a sample.",
       );
     return fail(
       res,
@@ -142,14 +142,14 @@ export default async function handler(req, res) {
       res,
       422,
       "AI_BLOCKED",
-      "Gemma could not provide this activity. Try a different outdoor learning topic.",
+      "OutsideClass AI could not provide this activity. Try a different outdoor learning topic.",
     );
   if (candidate?.finishReason === "MAX_TOKENS")
     return fail(
       res,
       502,
       "AI_TRUNCATED",
-      "Gemma ran out of response space before finishing the card. Try a simpler topic.",
+      "OutsideClass AI ran out of response space before finishing the card. Try a simpler topic.",
     );
   const parts = candidate?.content?.parts;
   const raw = Array.isArray(parts)
@@ -163,7 +163,7 @@ export default async function handler(req, res) {
       res,
       502,
       "AI_EMPTY",
-      "Gemma returned no activity text. Please retry or choose a sample.",
+      "OutsideClass AI returned no activity text. Please retry or choose a sample.",
     );
   let activity;
   try {
@@ -174,7 +174,7 @@ export default async function handler(req, res) {
       res,
       502,
       "AI_ACTIVITY_FORMAT",
-      "Gemma replied, but the activity card was not in the required format. Please retry.",
+      "OutsideClass AI replied, but the activity card was not in the required format. Please retry.",
     );
   }
   const { images, ...preferences } = input;
@@ -183,7 +183,7 @@ export default async function handler(req, res) {
       ...activity,
       ...preferences,
       imageUsed: !!images?.length,
-      source: `Gemma · ${model}`,
+      source: "OutsideClass AI",
       beforeYouGo: safetyNotes(input),
     },
   });

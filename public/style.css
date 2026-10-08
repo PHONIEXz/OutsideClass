@@ -709,6 +709,41 @@ nav {
   border-top: 1px solid #ccd6c8;
   padding: 28px 0;
 }
+.release {
+  scroll-margin-top: 24px;
+}
+.release h2 a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+.release:target {
+  border-left: 3px solid #b8571e;
+  padding-left: 18px;
+}
+.release-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.feed-controls {
+  padding: 22px;
+  background: #edf1e7;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.feed-controls label {
+  margin-top: 12px;
+}
+.release details summary,
+.feed-help summary {
+  cursor: pointer;
+}
+.feed-help li {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
 .release time {
   font-size: 13px;
   color: #657568;
