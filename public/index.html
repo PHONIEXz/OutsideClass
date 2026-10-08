@@ -1,7 +1,686 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#163f35"><meta name="description" content="Turn a learning topic into a short outdoor activity. Observe, discover, and keep a field note."><title>OutsideClass | A little less screen. A little more world.</title><link rel="icon" type="image/png" href="/outsideclass-logo.png?v=1"><link rel="apple-touch-icon" href="/outsideclass-logo.png?v=1"><link rel="alternate" type="application/rss+xml" title="OutsideClass updates" href="/updates.xml"><link rel="stylesheet" href="/style.css"><script type="module" src="/app.js"></script></head><body><a class="skip-link" href="#main">Skip to content</a>
-<header><a class="brand" href="/"><img class="brand-icon" src="/outsideclass-logo.png" alt="" width="48" height="48"><span class="brand-wordmark"><strong>Outside</strong>Class<small>THE WORLD IS YOUR WORKBOOK</small></span></a><nav aria-label="Main"><a class="nav" href="/" data-page="home">Home</a><a id="explore" class="nav" href="/learn" data-page="builder">Activities</a><a id="journal" class="nav" href="/notebook" data-page="notebook">Notebook <span id="count">0</span></a><a class="nav" href="/guides" data-page="guides">Guides</a><a class="nav" href="/updates" data-page="updates">Updates</a></nav></header>
-<main id="main"><section id="home" tabindex="-1"><div class="home-hero"><div><span class="eyebrow">SMALL LESSONS. A BIGGER WORLD.</span><h1>Make the world<br>your <em>classroom.</em></h1><p>Turn what you are studying into something you can see, count, question and remember. Start with five minutes, wherever you are.</p><a class="primary link-button" href="/learn" data-page="builder">Find my next discovery →</a><a class="text-link" href="/guides" data-page="guides">See how it works</a></div><div class="hero-note"><span class="eyebrow">TODAY’S LITTLE MISSION</span><h2>Look for a pattern.</h2><p>A leaf. A tile. A shadow on the wall. Find something that repeats and ask yourself why.</p><button class="secondary" data-sample="1">Open the pattern activity →</button><div class="time-stamp"><time id="local-clock"></time><small>Your device’s local time</small></div></div></div><div class="feature-grid"><article><span class="eyebrow">01 / CHOOSE</span><h2>Your topic. Your space.</h2><p>Science, maths or a question from class. Choose your time, weather and a spot that works for you.</p></article><article><span class="eyebrow">02 / EXPLORE</span><h2>Read once. Look up.</h2><p>Get a short activity, start the timer and put your phone away. A seat or closed window works too.</p></article><article><span class="eyebrow">03 / KEEP</span><h2>Notice something new.</h2><p>Save your observations and questions in your notebook. Return to them before your next discovery.</p></article></div><section class="journeys"><span class="eyebrow">LEARNING FITS MORE THAN ONE LIFE</span><h2>Find your way outside.</h2><div class="feature-grid"><article><h3>For students</h3><p>Make a lesson concrete with a short activity you can do close to home.</p><button class="secondary" data-audience="Myself">Explore on my own</button></article><article><h3>For parents</h3><p>Turn a free afternoon into a shared discovery, with questions to talk about together.</p><button class="secondary" data-audience="Family">Plan a family activity</button></article><article><h3>For teachers</h3><p>Prepare a group activity with materials, leader guidance and a printable card.</p><button class="secondary" data-audience="Class">Plan a class activity</button></article></div></section><div class="home-banner"><div><h2>A little less screen. A little more world.</h2><p>No account needed. No GPS. Your notebook stays in this browser.</p></div><a class="secondary link-button" href="/updates" data-page="updates">Follow what’s new →</a></div></section><section id="builder" hidden tabindex="-1"><div class="intro"><span class="eyebrow">SMALL LESSONS. REAL DISCOVERIES.</span><h1>Take your curiosity<br><em>outside.</em></h1><p>Start with your own question. Get a clear explanation and, when it fits, a short observation you can try.</p></div>
-<div class="workspace"><form id="form"><div class="section-label"><span>01 / YOUR NEXT DISCOVERY</span><span>5–20 MIN</span></div><h2>What are you curious about?</h2><label for="topic">What do you want to understand?</label><textarea id="topic" name="topic" placeholder="Ask your own question, e.g. Why do shadows get longer in the evening?" minlength="2" maxlength="600" required aria-describedby="question-help"></textarea><p id="question-help" class="hint">Ask any learning question, up to 600 characters. We will suggest an observation when it fits, or explain the idea directly. The suggestions below are optional.</p><label for="learner-stage">Who is learning?</label><select id="learner-stage"><option>Teen or adult</option><option>Young learner</option></select><div class="question-images"><label for="question-images">Ask about an image (optional, up to two)</label><input type="file" id="question-images" accept="image/png,image/jpeg,image/webp,image/gif" multiple><div id="question-image-preview" class="photo-strip"></div><button id="clear-question-images" class="secondary" type="button" hidden>Remove question images</button><label class="consent"><input id="image-consent" type="checkbox"> I agree to send these selected images to Google AI with this question.</label><p class="hint">Images are resized first. Only the images selected here are sent; your notebook photos stay local. Avoid uploading personal details.</p><p id="question-image-status" role="status"></p></div><div id="followup-context" hidden><p id="followup-summary" class="hint"></p><button id="clear-followup" type="button" class="secondary">Ask without the earlier answer</button></div><div class="chips"><button type="button" data-topic="Shadows and light">Shadows & light</button><button type="button" data-topic="Symmetry">Symmetry</button><button type="button" data-topic="Biodiversity">Biodiversity</button></div><div class="row"><div><label for="minutes">Time outside</label><select id="minutes"><option value="5">5 minutes</option><option value="10" selected>10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option></select></div><div><label for="level">Learning level</label><select id="level"><option>Beginner</option><option>Intermediate</option></select></div></div><label for="place">Your nearby space</label><select id="place"><option>Courtyard</option><option>Garden or park</option><option>Outside my doorway</option><option>By a window</option><option>From a doorway</option></select><p class="hint">A window or doorway works on rainy days. No address or GPS needed.</p><label for="spot">Your spot (optional)</label><input id="spot" maxlength="60" placeholder="e.g. kitchen window, school courtyard"><p class="hint">Name a place within the space you chose above. You can return and compare what changed. No address needed.</p><div id="revisit-context" class="revisit-context" hidden><strong>Returning to a discovery</strong><p id="revisit-summary"></p><button id="clear-revisit" class="secondary" type="button">Start a new activity instead</button></div><label for="mobility">How will you explore?</label><select id="mobility"><option value="Flexible">I can move around</option><option value="Seated">From a seat</option></select><div class="row"><div><label for="weather">Weather today</label><select id="weather"><option>Any</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Hot</option><option>Cool</option></select></div><div><label for="timeOfDay">Time of day</label><select id="timeOfDay"><option>Any</option><option>Morning</option><option>Midday</option><option>Afternoon</option><option>Evening</option></select></div></div><p class="hint">Choose what you see outside. No weather tracking or GPS.</p><label for="audience">Who is this for?</label><select id="audience"><option value="Myself">Just me</option><option value="Family">My family or children</option><option value="Class">My class or group</option></select><div id="group-fields" hidden><div class="row"><div><label for="groupSize">Group size</label><input id="groupSize" type="number" min="2" max="40" step="1" value="4"></div><div><label for="ageRange">Ages</label><select id="ageRange"><option>5-7</option><option selected>8-10</option><option>11-13</option><option>14-17</option><option>Adults</option></select></div></div><p class="hint">An adult leads. You will get a leader guide, discussion questions and a printable sheet.</p></div><button class="primary" id="generate">Explore my question</button><p id="status" role="status" aria-live="polite"></p></form>
-<aside><span class="eyebrow">A LITTLE INSPIRATION</span><div class="big-number">10<span>MINUTES</span></div><h2>Same place.<br>New eyes.</h2><p>Start with a ready-made activity. No AI connection needed.</p><button class="sample" data-sample="0">01 <span>Follow a shadow<small>LIGHT · OBSERVATION</small></span>↗</button><button class="sample" data-sample="1">02 <span>Find nature’s patterns<small>MATHS · SYMMETRY</small></span>↗</button><button class="sample" data-sample="2">03 <span>A tiny life census<small>BIOLOGY · DIVERSITY</small></span>↗</button></aside></div></section>
-<section id="activity" hidden tabindex="-1"></section><section id="notebook" hidden tabindex="-1"><span class="eyebrow">YOUR FIELD NOTEBOOK</span><h1>Things you noticed.</h1><p>Saved on this browser. Clearing browser data removes these notes.</p><p class="hint">Name a spot on your next card, record what you observed, then use Return to this spot to test an idea.</p><section id="progress-summary" class="progress-summary" aria-label="Learning progress"></section><div class="actions"><button id="backup-notebook" class="secondary">Download notebook backup</button><label class="import-label" for="import-notebook">Import backup or activity pack<input id="import-notebook" type="file" accept="application/json,.json"></label></div><p id="backup-status" role="status"></p><p class="hint">Backups include your notes and attached photos. Keep them private. Import adds missing cards and keeps existing cards unchanged.</p><details class="comparison"><summary>Compare two discoveries</summary><div class="row"><div><label for="compare-first">First card</label><select id="compare-first"></select></div><div><label for="compare-second">Second card</label><select id="compare-second"></select></div></div><button id="compare-notes" class="secondary">Compare notes and photos</button><div id="comparison-result"></div></details><details class="classroom-help"><summary>Use OutsideClass with a class</summary><ol><li>Choose Class mode and review the generated card.</li><li>Print it or choose Download activity pack on the card. The pack contains the lesson, not your personal reflection or photos.</li><li>Share the file yourself. Learners can import it into their notebook, save their observations and choose Download this work.</li><li>Import returned work to review it in your notebook. No accounts or live submission dashboard are included.</li></ol></details><div id="entries"></div></section><section id="guides" hidden tabindex="-1"><div class="intro"><span class="eyebrow">A GOOD PLACE TO START</span><h1>Small steps.<br><em>Useful discoveries.</em></h1><p>Use OutsideClass for independent learning, family time or your next lesson.</p></div><div class="feature-grid"><article><h2>Students</h2><ol><li>Choose a topic you are learning, such as symmetry or plant growth.</li><li>Choose a safe nearby space and a time you can spare.</li><li>Read the card and safety notes before starting.</li><li>Name the spot and record what you saw, your possible explanation and another possibility. Return another day to test your ideas.</li></ol><button class="secondary" data-audience="Myself">Start learning</button></article><article><h2>Parents</h2><ol><li>Choose Family mode and your children’s age range.</li><li>Check the materials and agree where everyone will stay.</li><li>Let each child explain what they notice.</li><li>Use the discussion questions to compare discoveries.</li></ol><button class="secondary" data-audience="Family">Plan together</button></article><article><h2>Teachers</h2><ol><li>Enter the coursework topic and choose Class mode.</li><li>Set group size, ages and available lesson time.</li><li>Review the generated steps and print the card.</li><li>Discuss observations and record questions for the next class.</li></ol><button class="secondary" data-audience="Class">Build a lesson</button></article></div><div class="guide-notes"><h2>Make it work for your learners</h2><details open><summary>Can’t go outside?</summary><p>Choose “By a window” for observations indoors at a closed window. Choose “From a seat” to request steps without walking, standing or reaching far.</p></details><details><summary>What if the AI is unavailable?</summary><p>The Activities page includes three ready-made cards. After your first online visit, cached pages, sample activities and saved notebook entries can work offline in supported browsers.</p></details><details><summary>How do I return to the same spot?</summary><p>Give your spot a nickname on the Activities page. After you return, write what you noticed, what you think it means and another possible reason. Save the reflection, open your Notebook and choose “Return to this spot.” Check the weather again before generating the new activity. Your earlier answers are sent to Gemma for that request.</p></details><details><summary>Where are my notes stored?</summary><p>Only in this browser on this device. They do not sync between devices. Clearing browser data deletes them. Print a card to keep a paper copy.</p></details><details><summary>Does the timer ring when my phone is locked?</summary><p>The timer checks elapsed time when you return, but it does not send a background alarm. Use your phone’s alarm if you need a sound while the screen is locked.</p></details><details><summary>Before a group goes outside</summary><p>An adult should review the AI-generated activity, check conditions and access needs, agree boundaries and keep learners in sight. Stop if conditions are unsafe.</p></details></div></section><section id="updates" hidden tabindex="-1"><div class="intro"><span class="eyebrow">GROWING WITH YOUR CURIOSITY</span><h1>Fresh ideas.<br><em>Small improvements.</em></h1><p>Follow product news and see what you can use today.</p></div><div class="updates-layout"><div><article class="release"><time datetime="2026-10-07">7 October 2026</time><h2>A notebook you can take with you</h2><p>Download backups with your notes and photos, import them on another device, compare discoveries, practise with understanding checks, and exchange class activity packs. You can also choose images to send with a question after giving consent.</p></article><article class="release"><time datetime="2026-10-07">7 October 2026</time><h2>Start with your own question</h2><p>Ask a longer learning question, then get an observation activity when it fits or a direct explanation when it does not. Ask follow-up questions and open reference-image sources for supported topics.</p></article><article class="release"><time datetime="2026-10-07">7 October 2026</time><h2>Pictures that help you learn</h2><p>Activities about shadows, symmetry, biodiversity and plant parts now include a labelled learning diagram you can download or print. Use Your own images near the top of a card to attach up to two photos or sketches, then Save card to keep them in this browser.</p></article><article class="release"><time datetime="2026-10-07">7 October 2026</time><h2>Return to the same spot</h2><p>Name a place, record what you saw and two possible explanations, then return to compare. Gemma uses your earlier observations to propose a new check. Notes stay in this browser.</p></article><article class="release"><time datetime="2026-10-07">7 October 2026</time><h2>A place for your whole learning journey</h2><p>Find dedicated pages for activities, your notebook, practical guides and product updates. Time your exploration with pause and resume controls.</p></article><article class="release"><time datetime="2026-10-07">7 October 2026</time><h2>More ways to learn together</h2><p>Family and class activities now include leader guidance and discussion questions. Choose a seat, window or doorway, and match activities to weather and time of day.</p></article><article class="release"><time datetime="2026-10-07">7 October 2026</time><h2>Keep more than a card</h2><p>Record what you noticed, what surprised you and the question you want to explore next. Your older notebook entries still work.</p></article></div><aside class="subscribe"><span class="eyebrow">STAY IN THE LOOP</span><h2>Subscribe to updates</h2><p>Follow the OutsideClass RSS feed in your favourite feed reader. New posts will appear there when we publish them.</p><label for="feed-url">Feed address</label><input id="feed-url" value="https://outsideclass-phoenix.vercel.app/updates.xml" readonly><button class="primary" id="copy-feed">Copy feed address</button><p id="feed-status" role="status"></p><a class="text-link" href="/updates.xml">Open RSS feed ↗</a><p class="hint">No email address is collected. Email newsletters are not available yet.</p><hr><h3>Help shape OutsideClass</h3><p>Found a problem or have an idea for a lesson?</p><a href="https://github.com/PHONIEXz/OutsideClass/issues" class="text-link" target="_blank" rel="noopener">Share feedback on GitHub ↗</a></aside></div></section></main><section id="session-panel" class="session-panel" hidden aria-label="Activity timer"><div><span id="timer-title"></span><strong id="timer-clock" aria-label="Time remaining">00:00</strong><span id="timer-status" role="status"></span></div><div><button id="timer-pause" class="secondary">Pause</button><button id="timer-finish" class="secondary">Finish & reflect</button></div></section><footer><span>Less scrolling. More noticing. <a href="/guides" data-page="guides">Help</a> · <a href="/updates" data-page="updates">Subscribe to updates</a></span><span id="offline">Read once. Explore slowly.</span></footer></body></html>
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#163f35" />
+    <meta
+      name="description"
+      content="Turn a learning topic into a short outdoor activity. Observe, discover, and keep a field note."
+    />
+    <title>OutsideClass | A little less screen. A little more world.</title>
+    <link rel="icon" type="image/png" href="/outsideclass-logo.png?v=2" />
+    <link rel="apple-touch-icon" href="/outsideclass-logo.png?v=2" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="OutsideClass updates"
+      href="/updates.xml"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header>
+      <a class="brand" href="/"
+        ><img
+          class="brand-icon"
+          src="/outsideclass-logo.png"
+          alt=""
+          width="48"
+          height="48"
+        /><span class="brand-wordmark"
+          ><strong>Outside</strong>Class<small
+            >THE WORLD IS YOUR WORKBOOK</small
+          ></span
+        ></a
+      >
+      <nav aria-label="Main">
+        <a class="nav" href="/" data-page="home">Home</a
+        ><a id="explore" class="nav" href="/learn" data-page="builder"
+          >Activities</a
+        ><a id="journal" class="nav" href="/notebook" data-page="notebook"
+          >Notebook <span id="count">0</span></a
+        ><a class="nav" href="/guides" data-page="guides">Guides</a
+        ><a class="nav" href="/updates" data-page="updates">Updates</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section id="home" tabindex="-1">
+        <div class="home-hero">
+          <div>
+            <span class="eyebrow">SMALL LESSONS. A BIGGER WORLD.</span>
+            <h1>Make the world<br />your <em>classroom.</em></h1>
+            <p>
+              Turn what you are studying into something you can see, count,
+              question and remember. Start with five minutes, wherever you are.
+            </p>
+            <a class="primary link-button" href="/learn" data-page="builder"
+              >Find my next discovery →</a
+            ><a class="text-link" href="/guides" data-page="guides"
+              >See how it works</a
+            >
+          </div>
+          <div class="hero-note">
+            <span class="eyebrow">TODAY’S LITTLE MISSION</span>
+            <h2>Look for a pattern.</h2>
+            <p>
+              A leaf. A tile. A shadow on the wall. Find something that repeats
+              and ask yourself why.
+            </p>
+            <button class="secondary" data-sample="1">
+              Open the pattern activity →
+            </button>
+            <div class="time-stamp">
+              <time id="local-clock"></time
+              ><small>Your device’s local time</small>
+            </div>
+          </div>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <span class="eyebrow">01 / CHOOSE</span>
+            <h2>Your topic. Your space.</h2>
+            <p>
+              Science, maths or a question from class. Choose your time, weather
+              and a spot that works for you.
+            </p>
+          </article>
+          <article>
+            <span class="eyebrow">02 / EXPLORE</span>
+            <h2>Read once. Look up.</h2>
+            <p>
+              Get a short activity, start the timer and put your phone away. A
+              seat or closed window works too.
+            </p>
+          </article>
+          <article>
+            <span class="eyebrow">03 / KEEP</span>
+            <h2>Notice something new.</h2>
+            <p>
+              Save your observations and questions in your notebook. Return to
+              them before your next discovery.
+            </p>
+          </article>
+        </div>
+        <section class="journeys">
+          <span class="eyebrow">LEARNING FITS MORE THAN ONE LIFE</span>
+          <h2>Find your way outside.</h2>
+          <div class="feature-grid">
+            <article>
+              <h3>For students</h3>
+              <p>
+                Make a lesson concrete with a short activity you can do close to
+                home.
+              </p>
+              <button class="secondary" data-audience="Myself">
+                Explore on my own
+              </button>
+            </article>
+            <article>
+              <h3>For parents</h3>
+              <p>
+                Turn a free afternoon into a shared discovery, with questions to
+                talk about together.
+              </p>
+              <button class="secondary" data-audience="Family">
+                Plan a family activity
+              </button>
+            </article>
+            <article>
+              <h3>For teachers</h3>
+              <p>
+                Prepare a group activity with materials, leader guidance and a
+                printable card.
+              </p>
+              <button class="secondary" data-audience="Class">
+                Plan a class activity
+              </button>
+            </article>
+          </div>
+        </section>
+        <div class="home-banner">
+          <div>
+            <h2>A little less screen. A little more world.</h2>
+            <p>
+              No account needed. No GPS. Your notebook stays in this browser.
+            </p>
+          </div>
+          <a class="secondary link-button" href="/updates" data-page="updates"
+            >Follow what’s new →</a
+          >
+        </div>
+      </section>
+      <section id="builder" hidden tabindex="-1">
+        <div class="intro">
+          <span class="eyebrow">SMALL LESSONS. REAL DISCOVERIES.</span>
+          <h1>Take your curiosity<br /><em>outside.</em></h1>
+          <p>
+            Start with your own question. Get a clear explanation and, when it
+            fits, a short observation you can try.
+          </p>
+        </div>
+        <div class="workspace">
+          <form id="form">
+            <div class="section-label">
+              <span>01 / YOUR NEXT DISCOVERY</span><span>5–20 MIN</span>
+            </div>
+            <h2>What are you curious about?</h2>
+            <label for="topic">What do you want to understand?</label
+            ><textarea
+              id="topic"
+              name="topic"
+              placeholder="Ask your own question, e.g. Why do shadows get longer in the evening?"
+              minlength="2"
+              maxlength="600"
+              required
+              aria-describedby="question-help"
+            ></textarea>
+            <p id="question-help" class="hint">
+              Ask any learning question, up to 600 characters. We will suggest
+              an observation when it fits, or explain the idea directly. The
+              suggestions below are optional.
+            </p>
+            <label for="learner-stage">Who is learning?</label
+            ><select id="learner-stage">
+              <option>Teen or adult</option>
+              <option>Young learner</option>
+            </select>
+            <div class="question-images">
+              <label for="question-images"
+                >Ask about an image (optional, up to two)</label
+              ><input
+                type="file"
+                id="question-images"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+                multiple
+              />
+              <div id="question-image-preview" class="photo-strip"></div>
+              <button
+                id="clear-question-images"
+                class="secondary"
+                type="button"
+                hidden
+              >
+                Remove question images</button
+              ><label class="consent"
+                ><input id="image-consent" type="checkbox" /> I agree to send
+                these selected images to Google AI with this question.</label
+              >
+              <p class="hint">
+                Images are resized first. Only the images selected here are
+                sent; your notebook photos stay local. Avoid uploading personal
+                details.
+              </p>
+              <p id="question-image-status" role="status"></p>
+            </div>
+            <div id="followup-context" hidden>
+              <p id="followup-summary" class="hint"></p>
+              <button id="clear-followup" type="button" class="secondary">
+                Ask without the earlier answer
+              </button>
+            </div>
+            <div class="chips">
+              <button type="button" data-topic="Shadows and light">
+                Shadows & light</button
+              ><button type="button" data-topic="Symmetry">Symmetry</button
+              ><button type="button" data-topic="Biodiversity">
+                Biodiversity
+              </button>
+            </div>
+            <div class="row">
+              <div>
+                <label for="minutes">Time outside</label
+                ><select id="minutes">
+                  <option value="5">5 minutes</option>
+                  <option value="10" selected>10 minutes</option>
+                  <option value="15">15 minutes</option>
+                  <option value="20">20 minutes</option>
+                </select>
+              </div>
+              <div>
+                <label for="level">Learning level</label
+                ><select id="level">
+                  <option>Beginner</option>
+                  <option>Intermediate</option>
+                </select>
+              </div>
+            </div>
+            <label for="place">Your nearby space</label
+            ><select id="place">
+              <option>Courtyard</option>
+              <option>Garden or park</option>
+              <option>Outside my doorway</option>
+              <option>By a window</option>
+              <option>From a doorway</option>
+            </select>
+            <p class="hint">
+              A window or doorway works on rainy days. No address or GPS needed.
+            </p>
+            <label for="spot">Your spot (optional)</label
+            ><input
+              id="spot"
+              maxlength="60"
+              placeholder="e.g. kitchen window, school courtyard"
+            />
+            <p class="hint">
+              Name a place within the space you chose above. You can return and
+              compare what changed. No address needed.
+            </p>
+            <div id="revisit-context" class="revisit-context" hidden>
+              <strong>Returning to a discovery</strong>
+              <p id="revisit-summary"></p>
+              <button id="clear-revisit" class="secondary" type="button">
+                Start a new activity instead
+              </button>
+            </div>
+            <label for="mobility">How will you explore?</label
+            ><select id="mobility">
+              <option value="Flexible">I can move around</option>
+              <option value="Seated">From a seat</option>
+            </select>
+            <div class="row">
+              <div>
+                <label for="weather">Weather today</label
+                ><select id="weather">
+                  <option>Any</option>
+                  <option>Sunny</option>
+                  <option>Cloudy</option>
+                  <option>Rainy</option>
+                  <option>Windy</option>
+                  <option>Hot</option>
+                  <option>Cool</option>
+                </select>
+              </div>
+              <div>
+                <label for="timeOfDay">Time of day</label
+                ><select id="timeOfDay">
+                  <option>Any</option>
+                  <option>Morning</option>
+                  <option>Midday</option>
+                  <option>Afternoon</option>
+                  <option>Evening</option>
+                </select>
+              </div>
+            </div>
+            <p class="hint">
+              Choose what you see outside. No weather tracking or GPS.
+            </p>
+            <label for="audience">Who is this for?</label
+            ><select id="audience">
+              <option value="Myself">Just me</option>
+              <option value="Family">My family or children</option>
+              <option value="Class">My class or group</option>
+            </select>
+            <div id="group-fields" hidden>
+              <div class="row">
+                <div>
+                  <label for="groupSize">Group size</label
+                  ><input
+                    id="groupSize"
+                    type="number"
+                    min="2"
+                    max="40"
+                    step="1"
+                    value="4"
+                  />
+                </div>
+                <div>
+                  <label for="ageRange">Ages</label
+                  ><select id="ageRange">
+                    <option>5-7</option>
+                    <option selected>8-10</option>
+                    <option>11-13</option>
+                    <option>14-17</option>
+                    <option>Adults</option>
+                  </select>
+                </div>
+              </div>
+              <p class="hint">
+                An adult leads. You will get a leader guide, discussion
+                questions and a printable sheet.
+              </p>
+            </div>
+            <p id="ai-privacy" class="hint">
+              Your question and choices, including your spot nickname, are sent
+              to Google AI to create this card. Follow-ups and return visits
+              also send the context shown above. Use a nickname, never an
+              address or personal details. Saved notebook notes and photos stay
+              on this device unless you choose to include them in a request or
+              share a downloaded file.
+            </p>
+            <button class="primary" id="generate" aria-describedby="ai-privacy">
+              Explore my question
+            </button>
+            <p id="status" role="status" aria-live="polite"></p>
+          </form>
+          <aside>
+            <span class="eyebrow">A LITTLE INSPIRATION</span>
+            <div class="big-number">10<span>MINUTES</span></div>
+            <h2>Same place.<br />New eyes.</h2>
+            <p>Start with a ready-made activity. No AI connection needed.</p>
+            <button class="sample" data-sample="0">
+              01 <span>Follow a shadow<small>LIGHT · OBSERVATION</small></span
+              >↗</button
+            ><button class="sample" data-sample="1">
+              02
+              <span>Find nature’s patterns<small>MATHS · SYMMETRY</small></span
+              >↗</button
+            ><button class="sample" data-sample="2">
+              03
+              <span>A tiny life census<small>BIOLOGY · DIVERSITY</small></span
+              >↗
+            </button>
+          </aside>
+        </div>
+      </section>
+      <section id="activity" hidden tabindex="-1"></section>
+      <section id="notebook" hidden tabindex="-1">
+        <span class="eyebrow">YOUR FIELD NOTEBOOK</span>
+        <h1>Things you noticed.</h1>
+        <p>Saved on this browser. Clearing browser data removes these notes.</p>
+        <p class="hint">
+          Name a spot on your next card, record what you observed, then use
+          Return to this spot to test an idea.
+        </p>
+        <section
+          id="progress-summary"
+          class="progress-summary"
+          aria-label="Learning progress"
+        ></section>
+        <div class="actions">
+          <button id="backup-notebook" class="secondary">
+            Download notebook backup</button
+          ><label class="import-label" for="import-notebook"
+            >Import backup or activity pack<input
+              id="import-notebook"
+              type="file"
+              accept="application/json,.json"
+          /></label>
+        </div>
+        <p id="backup-status" role="status"></p>
+        <p class="hint">
+          Backups include your notes and attached photos. Keep them private.
+          Import adds missing cards and keeps existing cards unchanged.
+        </p>
+        <details class="comparison">
+          <summary>Compare two discoveries</summary>
+          <div class="row">
+            <div>
+              <label for="compare-first">First card</label
+              ><select id="compare-first"></select>
+            </div>
+            <div>
+              <label for="compare-second">Second card</label
+              ><select id="compare-second"></select>
+            </div>
+          </div>
+          <button id="compare-notes" class="secondary">
+            Compare notes and photos
+          </button>
+          <div id="comparison-result"></div>
+        </details>
+        <details class="classroom-help">
+          <summary>Use OutsideClass with a class</summary>
+          <ol>
+            <li>Choose Class mode and review the generated card.</li>
+            <li>
+              Print it or choose Download activity pack on the card. The pack
+              contains the lesson, not your personal reflection or photos.
+            </li>
+            <li>
+              Share the file yourself. Learners can import it into their
+              notebook, save their observations and choose Download this work.
+            </li>
+            <li>
+              Import returned work to review it in your notebook. No accounts or
+              live submission dashboard are included.
+            </li>
+          </ol>
+        </details>
+        <div id="entries"></div>
+      </section>
+      <section id="guides" hidden tabindex="-1">
+        <div class="intro">
+          <span class="eyebrow">A GOOD PLACE TO START</span>
+          <h1>Small steps.<br /><em>Useful discoveries.</em></h1>
+          <p>
+            Use OutsideClass for independent learning, family time or your next
+            lesson.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <h2>Students</h2>
+            <ol>
+              <li>
+                Choose a topic you are learning, such as symmetry or plant
+                growth.
+              </li>
+              <li>Choose a safe nearby space and a time you can spare.</li>
+              <li>Read the card and safety notes before starting.</li>
+              <li>
+                Name the spot and record what you saw, your possible explanation
+                and another possibility. Return another day to test your ideas.
+              </li>
+            </ol>
+            <button class="secondary" data-audience="Myself">
+              Start learning
+            </button>
+          </article>
+          <article>
+            <h2>Parents</h2>
+            <ol>
+              <li>Choose Family mode and your children’s age range.</li>
+              <li>Check the materials and agree where everyone will stay.</li>
+              <li>Let each child explain what they notice.</li>
+              <li>Use the discussion questions to compare discoveries.</li>
+            </ol>
+            <button class="secondary" data-audience="Family">
+              Plan together
+            </button>
+          </article>
+          <article>
+            <h2>Teachers</h2>
+            <ol>
+              <li>Enter the coursework topic and choose Class mode.</li>
+              <li>Set group size, ages and available lesson time.</li>
+              <li>Review the generated steps and print the card.</li>
+              <li>
+                Discuss observations and record questions for the next class.
+              </li>
+            </ol>
+            <button class="secondary" data-audience="Class">
+              Build a lesson
+            </button>
+          </article>
+        </div>
+        <div class="guide-notes">
+          <h2>Make it work for your learners</h2>
+          <details open>
+            <summary>Can’t go outside?</summary>
+            <p>
+              Choose “By a window” for observations indoors at a closed window.
+              Choose “From a seat” to request steps without walking, standing or
+              reaching far.
+            </p>
+          </details>
+          <details>
+            <summary>What if the AI is unavailable?</summary>
+            <p>
+              The Activities page includes three ready-made cards. After your
+              first online visit, cached pages, sample activities and saved
+              notebook entries can work offline in supported browsers.
+            </p>
+          </details>
+          <details>
+            <summary>How do I return to the same spot?</summary>
+            <p>
+              Give your spot a nickname on the Activities page. After you
+              return, write what you noticed, what you think it means and
+              another possible reason. Save the reflection, open your Notebook
+              and choose “Return to this spot.” Check the weather again before
+              generating the new activity. Your earlier answers are sent to
+              Gemma for that request.
+            </p>
+          </details>
+          <details>
+            <summary>Where are my notes stored?</summary>
+            <p>
+              Only in this browser on this device. They do not sync between
+              devices. Clearing browser data deletes them. Print a card to keep
+              a paper copy.
+            </p>
+          </details>
+          <details>
+            <summary>Does the timer ring when my phone is locked?</summary>
+            <p>
+              The timer checks elapsed time when you return, but it does not
+              send a background alarm. Use your phone’s alarm if you need a
+              sound while the screen is locked.
+            </p>
+          </details>
+          <details>
+            <summary>Before a group goes outside</summary>
+            <p>
+              An adult should review the AI-generated activity, check conditions
+              and access needs, agree boundaries and keep learners in sight.
+              Stop if conditions are unsafe.
+            </p>
+          </details>
+        </div>
+      </section>
+      <section id="updates" hidden tabindex="-1">
+        <div class="intro">
+          <span class="eyebrow">GROWING WITH YOUR CURIOSITY</span>
+          <h1>Fresh ideas.<br /><em>Small improvements.</em></h1>
+          <p>Follow product news and see what you can use today.</p>
+        </div>
+        <div class="updates-layout">
+          <div>
+            <article class="release">
+              <time datetime="2026-10-07">7 October 2026</time>
+              <h2>A notebook you can take with you</h2>
+              <p>
+                Download backups with your notes and photos, import them on
+                another device, compare discoveries, practise with understanding
+                checks, and exchange class activity packs. You can also choose
+                images to send with a question after giving consent.
+              </p>
+            </article>
+            <article class="release">
+              <time datetime="2026-10-07">7 October 2026</time>
+              <h2>Start with your own question</h2>
+              <p>
+                Ask a longer learning question, then get an observation activity
+                when it fits or a direct explanation when it does not. Ask
+                follow-up questions and open reference-image sources for
+                supported topics.
+              </p>
+            </article>
+            <article class="release">
+              <time datetime="2026-10-07">7 October 2026</time>
+              <h2>Pictures that help you learn</h2>
+              <p>
+                Activities about shadows, symmetry, biodiversity and plant parts
+                now include a labelled learning diagram you can download or
+                print. Use Your own images near the top of a card to attach up
+                to two photos or sketches, then Save card to keep them in this
+                browser.
+              </p>
+            </article>
+            <article class="release">
+              <time datetime="2026-10-07">7 October 2026</time>
+              <h2>Return to the same spot</h2>
+              <p>
+                Name a place, record what you saw and two possible explanations,
+                then return to compare. Gemma uses your earlier observations to
+                propose a new check. Notes stay in this browser.
+              </p>
+            </article>
+            <article class="release">
+              <time datetime="2026-10-07">7 October 2026</time>
+              <h2>A place for your whole learning journey</h2>
+              <p>
+                Find dedicated pages for activities, your notebook, practical
+                guides and product updates. Time your exploration with pause and
+                resume controls.
+              </p>
+            </article>
+            <article class="release">
+              <time datetime="2026-10-07">7 October 2026</time>
+              <h2>More ways to learn together</h2>
+              <p>
+                Family and class activities now include leader guidance and
+                discussion questions. Choose a seat, window or doorway, and
+                match activities to weather and time of day.
+              </p>
+            </article>
+            <article class="release">
+              <time datetime="2026-10-07">7 October 2026</time>
+              <h2>Keep more than a card</h2>
+              <p>
+                Record what you noticed, what surprised you and the question you
+                want to explore next. Your older notebook entries still work.
+              </p>
+            </article>
+          </div>
+          <aside class="subscribe">
+            <span class="eyebrow">STAY IN THE LOOP</span>
+            <h2>Subscribe to updates</h2>
+            <p>
+              Follow the OutsideClass RSS feed in your favourite feed reader.
+              New posts will appear there when we publish them.
+            </p>
+            <label for="feed-url">Feed address</label
+            ><input
+              id="feed-url"
+              value="https://outsideclass-phoenix.vercel.app/updates.xml"
+              readonly
+            /><button class="primary" id="copy-feed">Copy feed address</button>
+            <p id="feed-status" role="status"></p>
+            <a class="text-link" href="/updates.xml">Open RSS feed ↗</a>
+            <p class="hint">
+              No email address is collected. Email newsletters are not available
+              yet.
+            </p>
+            <hr />
+            <h3>Help shape OutsideClass</h3>
+            <p>Found a problem or have an idea for a lesson?</p>
+            <a
+              href="https://github.com/PHONIEXz/OutsideClass/issues"
+              class="text-link"
+              target="_blank"
+              rel="noopener"
+              >Share feedback on GitHub ↗</a
+            >
+          </aside>
+        </div>
+      </section>
+    </main>
+    <section
+      id="session-panel"
+      class="session-panel"
+      hidden
+      aria-label="Activity timer"
+    >
+      <div>
+        <span id="timer-title"></span
+        ><strong id="timer-clock" aria-label="Time remaining">00:00</strong
+        ><span id="timer-status" role="status"></span>
+      </div>
+      <div>
+        <button id="timer-pause" class="secondary">Pause</button
+        ><button id="timer-finish" class="secondary">Finish & reflect</button>
+      </div>
+    </section>
+    <footer>
+      <span
+        >Less scrolling. More noticing.
+        <a href="/guides" data-page="guides">Help</a> ·
+        <a href="/updates" data-page="updates">Subscribe to updates</a></span
+      ><span id="offline">Read once. Explore slowly.</span>
+    </footer>
+  </body>
+</html>

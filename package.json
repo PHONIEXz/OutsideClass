@@ -1,1 +1,14 @@
-{"name":"outsideclass","version":"0.1.0","private":true,"type":"module","scripts":{"dev":"node --env-file-if-exists=.env server.mjs","test":"node --test","build":"node --check public/app.js && node --check public/learning.js && node --check public/notebook-tools.js && node --check lib/limits.js && node --check public/diagrams.js && node --check public/photos.js && node --check public/sw.js && node --check server.mjs && node --check api/activity.js"},"engines":{"node":">=22"}}
+{
+  "name": "outsideclass",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env server.mjs",
+    "test": "node --test",
+    "build": "node --check public/app.js && node --check public/learning.js && node --check public/notebook-tools.js && node --check lib/limits.js && node --check public/diagrams.js && node --check public/photos.js && node --check public/sw.js && node --check server.mjs && node --check api/activity.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
