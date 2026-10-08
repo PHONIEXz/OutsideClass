@@ -1,10 +1,22 @@
 # OutsideClass
 
+Created and maintained by **Paul Ayoade David** ([PHONIEXz](https://github.com/PHONIEXz)).
+
 **A little less screen. A little more world.** Ask a learning question, read a short field card, put the phone away, and return with evidence of what you noticed.
 
 [Try OutsideClass](https://outsideclass-phoenix.vercel.app/) · [Report a problem](https://github.com/PHONIEXz/OutsideClass/issues)
 
 ![OutsideClass AI explanation and practice questions](docs/learning-preview.jpg)
+
+## Author and attribution
+
+OutsideClass was created by **Paul Ayoade David**, a teacher and cybersecurity student, to connect learning questions with observations in the world around us.
+
+- **Creator and maintainer:** Paul Ayoade David
+- **GitHub:** [PHONIEXz](https://github.com/PHONIEXz)
+- **Original repository:** [PHONIEXz/OutsideClass](https://github.com/PHONIEXz/OutsideClass)
+
+The application source is shared under the [MIT licence](LICENSE). When reusing copies or substantial portions of the code, preserve the copyright and licence notices required by that licence. If you share a fork or adaptation, please also credit Paul Ayoade David and link to this original repository.
 
 ## What you can do
 
