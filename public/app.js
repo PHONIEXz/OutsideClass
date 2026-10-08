@@ -1,4 +1,5 @@
 import { scoreChecks, learningProgress } from "./learning.js";
+import { readProfile, saveProfile, clearProfile } from "./profile.js";
 import {
   encodePhoto,
   makeBackup,
@@ -16,6 +17,67 @@ import {
   shrinkPhoto,
 } from "./photos.js";
 const $ = (id) => document.getElementById(id);
+let profile = null;
+try {
+  profile = readProfile(localStorage);
+} catch {
+  $("profile-status").textContent =
+    "Your local profile could not be read. You can still use every activity.";
+}
+function showProfile() {
+  $("profile-greeting").textContent = profile
+    ? `Welcome back, ${profile.name}.`
+    : "Welcome, explorer.";
+  $("profile-role-label").textContent = profile?.role || "";
+  $("profile-role-label").hidden = !profile?.role;
+  $("profile-summary").textContent = profile
+    ? "Edit your local profile"
+    : "What should we call you?";
+  $("profile-name").value = profile?.name || "";
+  $("profile-role").value = profile?.role || "";
+  $("profile-clear").hidden = !profile;
+  $("notebook-label").textContent = profile
+    ? `${profile.name}’s field notebook`
+    : "YOUR FIELD NOTEBOOK";
+}
+$("profile-form").onsubmit = (event) => {
+  event.preventDefault();
+  try {
+    profile = saveProfile(localStorage, {
+      name: $("profile-name").value,
+      role: $("profile-role").value,
+    });
+    showProfile();
+    $("profile-editor").open = false;
+    $("profile-status").textContent =
+      "Profile saved on this device. Your name and role are not sent to AI.";
+    $("profile-summary").focus();
+  } catch (error) {
+    $("profile-status").textContent =
+      error.name === "Error"
+        ? error.message
+        : "Your browser could not save this profile. Your previous profile is kept.";
+  }
+};
+$("profile-clear").onclick = () => {
+  try {
+    clearProfile(localStorage);
+    profile = null;
+    showProfile();
+    $("profile-status").textContent =
+      "Local profile cleared. Your saved cards, photos and timer are kept.";
+    $("profile-name").focus();
+  } catch {
+    $("profile-status").textContent =
+      "Your browser could not clear this profile. Try again.";
+  }
+};
+$("profile-cancel").onclick = () => {
+  showProfile();
+  $("profile-editor").open = false;
+  $("profile-summary").focus();
+};
+showProfile();
 let checkResult = null;
 let questionImages = [],
   questionImageUrls = [],

@@ -1,4 +1,4 @@
-const CACHE = "outsideclass-v15";
+const CACHE = "outsideclass-v16";
 const pages = ["/", "/learn", "/notebook", "/guides", "/updates", "/activity"];
 const assets = [
   "/learn",
@@ -15,6 +15,7 @@ const assets = [
   "/photos.js",
   "/diagrams.js",
   "/learning.js",
+  "/profile.js",
   "/notebook-tools.js",
   "/outsideclass-logo.png",
 ];

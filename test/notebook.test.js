@@ -11,6 +11,7 @@ import { readFile } from "node:fs/promises";
 import vm from "node:vm";
 import { diagramHtml } from "../public/diagrams.js";
 import { samples } from "../public/samples.js";
+import { readProfile, saveProfile, clearProfile } from "../public/profile.js";
 
 // Run the real UI handlers with controlled browser storage failures.
 const source = (
@@ -49,6 +50,7 @@ function browser(saved = [], overrides = {}) {
     URL,
     Promise,
     Blob,
+    AbortSignal,
     btoa,
     prompt: () => "Learner 01",
     captureExport: (blob, name) => exports.push({ blob, name }),
@@ -78,6 +80,9 @@ function browser(saved = [], overrides = {}) {
       },
     },
     samples,
+    readProfile,
+    saveProfile,
+    clearProfile,
     diagramHtml,
     scoreChecks,
     learningProgress,
@@ -419,4 +424,80 @@ test("failed timer removal warns that it may reappear after reload", () => {
     b.element("saved-status").textContent,
     /may reappear after reload/,
   );
+});
+
+test("local profile personalizes safely, survives navigation and clearing keeps notebook work", () => {
+  const b = browser([note("saved", 0)]);
+  b.element("profile-name").value = "Phoenix <b>";
+  b.element("profile-role").value = "Teacher";
+  b.element("profile-form").onsubmit({ preventDefault() {} });
+  assert.equal(
+    b.element("profile-greeting").textContent,
+    "Welcome back, Phoenix <b>.",
+  );
+  assert.equal(b.element("profile-greeting").innerHTML, "");
+  assert.equal(
+    b.element("notebook-label").textContent,
+    "Phoenix <b>’s field notebook",
+  );
+  b.api.navigate("guides");
+  assert.equal(b.element("profile-role-label").textContent, "Teacher");
+  b.element("profile-clear").onclick();
+  assert.equal(b.element("profile-greeting").textContent, "Welcome, explorer.");
+  assert.equal(b.api.notes.length, 1);
+  assert.equal(b.api.notes[0].id, "saved");
+  assert.equal(b.stored.has("outsideclass-profile-v1"), false);
+});
+
+test("failed profile save keeps the previous greeting and clear failure keeps its profile", () => {
+  const initialStorage = {
+    "outsideclass-profile-v1": JSON.stringify({ name: "Phoenix", role: "" }),
+  };
+  const b = browser([], { initialStorage });
+  b.failSave();
+  b.element("profile-name").value = "Changed name";
+  b.element("profile-form").onsubmit({ preventDefault() {} });
+  assert.equal(
+    b.element("profile-greeting").textContent,
+    "Welcome back, Phoenix.",
+  );
+  assert.match(
+    b.element("profile-status").textContent,
+    /previous profile is kept/,
+  );
+  b.failRemove();
+  b.element("profile-clear").onclick();
+  assert.equal(
+    b.element("profile-greeting").textContent,
+    "Welcome back, Phoenix.",
+  );
+  assert.equal(b.stored.has("outsideclass-profile-v1"), true);
+});
+
+test("profile name and role never enter AI requests or downloaded learner work", async () => {
+  let request;
+  const b = browser([], {
+    initialStorage: {
+      "outsideclass-profile-v1": JSON.stringify({
+        name: "PrivateNickname123",
+        role: "Teacher",
+      }),
+    },
+    fetch: async (url, options) => {
+      request = JSON.parse(options.body);
+      return { ok: false, json: async () => ({ error: "Mock provider" }) };
+    },
+  });
+  b.element("topic").value = "Shadows";
+  b.element("audience").value = "Myself";
+  await b.element("form").onsubmit({ preventDefault() {} });
+  assert.ok(request);
+  assert.equal(request.name, undefined);
+  assert.equal(request.role, undefined);
+  assert.ok(!JSON.stringify(request).includes("PrivateNickname123"));
+  b.api.render(samples[0]);
+  await b.api.downloadCard(false);
+  const exported = await b.exports[0].blob.text();
+  assert.ok(!exported.includes("PrivateNickname123"));
+  assert.ok(!exported.includes('"role":"Teacher"'));
 });

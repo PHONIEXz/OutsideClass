@@ -47,6 +47,53 @@
       </nav>
     </header>
     <main id="main">
+      <section class="local-profile" aria-label="Your local profile">
+        <div class="profile-welcome">
+          <p id="profile-greeting">Welcome, explorer.</p>
+          <span id="profile-role-label" class="tag" hidden></span>
+        </div>
+        <details id="profile-editor">
+          <summary id="profile-summary">What should we call you?</summary>
+          <form id="profile-form">
+            <label for="profile-name">First name or nickname</label>
+            <input
+              id="profile-name"
+              type="text"
+              maxlength="40"
+              required
+              autocomplete="off"
+              aria-describedby="profile-privacy"
+            />
+            <label for="profile-role">Your role (optional)</label>
+            <select id="profile-role">
+              <option value="">Prefer not to choose</option>
+              <option>Learner</option>
+              <option>Teacher</option>
+              <option>Parent</option>
+            </select>
+            <p id="profile-privacy" class="hint">
+              This is a local profile, not an account. Your name and role stay
+              on this device and are not sent to AI or included in notebook
+              downloads. No phone number, password or code needed.
+            </p>
+            <p class="hint">
+              Anyone using this browser can see or change it. It does not sync
+              devices or recover lost work, and clearing browser data removes
+              it.
+            </p>
+            <div class="actions">
+              <button class="primary" type="submit">Save profile</button>
+              <button class="secondary" id="profile-cancel" type="button">
+                Cancel
+              </button>
+              <button class="secondary" id="profile-clear" type="button" hidden>
+                Clear local profile
+              </button>
+            </div>
+          </form>
+        </details>
+        <p id="profile-status" role="status"></p>
+      </section>
       <section id="home" tabindex="-1">
         <div class="home-hero">
           <div>
@@ -377,7 +424,7 @@
       </section>
       <section id="activity" hidden tabindex="-1"></section>
       <section id="notebook" hidden tabindex="-1">
-        <span class="eyebrow">YOUR FIELD NOTEBOOK</span>
+        <span id="notebook-label" class="eyebrow">YOUR FIELD NOTEBOOK</span>
         <h1>Things you noticed.</h1>
         <p>Saved on this browser. Clearing browser data removes these notes.</p>
         <p class="hint">
@@ -589,6 +636,16 @@
         </div>
         <div class="updates-layout">
           <div>
+            <article class="release">
+              <time datetime="2026-10-08">8 October 2026</time>
+              <h2>A name for your learning journey</h2>
+              <p>
+                Choose a first name or nickname and an optional role for a
+                personal greeting and notebook label. No login, phone number or
+                code needed. Your local profile stays out of AI requests and
+                downloaded work, and clearing it keeps your discoveries.
+              </p>
+            </article>
             <article class="release">
               <time datetime="2026-10-08">8 October 2026</time>
               <h2>Keep your discoveries safe</h2>
