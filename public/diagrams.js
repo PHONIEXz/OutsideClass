@@ -1,30 +1,91 @@
 // Curated diagrams teach a concept; they never represent a learner's observation.
-const wrap=body=>`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360"><rect width="640" height="360" rx="18" fill="#f3f6e9"/><g font-family="Arial, sans-serif" font-size="19" fill="#183e35">${body}</g></svg>`;
-const diagrams={
- shadows:{title:'How a shadow forms',caption:'Light travels from the source. An opaque object blocks it, leaving a shadow on the surface.',svg:wrap('<circle cx="85" cy="95" r="32" fill="#e9b449"/><text x="38" y="45">Light source</text><path d="M110 112 L550 270 L315 270 Z" fill="#e3d89c"/><path d="M270 170 L550 270 L315 270 Z" fill="#839084"/><path d="M30 274 H610" stroke="#527062" stroke-width="5"/><rect x="257" y="160" width="24" height="112" rx="3" fill="#214d3e"/><path d="M118 119 L232 161" stroke="#bb8622" stroke-width="3"/><text x="191" y="137">Opaque object</text><text x="370" y="315">Shadow on surface</text><text x="34" y="315">Surface</text>')},
- symmetry:{title:'Compare two halves',caption:'The dashed line is a possible line of symmetry. Compare the shape on each side; real leaves may only be approximately symmetrical.',svg:wrap('<path d="M320 55 C180 85 160 220 320 285 C480 220 460 85 320 55" fill="#b5cf88" stroke="#365b40" stroke-width="4"/><path d="M320 55 V290 M320 125 L247 157 M320 125 L393 157 M320 183 L239 210 M320 183 L401 210" fill="none" stroke="#557941" stroke-width="3"/><path d="M320 30 V330" stroke="#a04e24" stroke-width="3" stroke-dasharray="8 7"/><text x="42" y="185">Left half</text><text x="478" y="185">Right half</text><text x="337" y="40">Compare across this line</text>')},
- biodiversity:{title:'Individuals and observed kinds',caption:'This example contains six individuals in three visual groups. Appearance alone does not confirm species, and a short visit may miss other life.',svg:wrap('<text x="36" y="45">Example only: 6 individuals, 3 observed kinds</text><path d="M100 175 V200 M210 175 V200" stroke="#527b45" stroke-width="5"/><g fill="#6b974e"><path d="M100 175 C40 120 70 80 100 100 C130 80 160 120 100 175"/><path d="M210 175 C150 120 180 80 210 100 C240 80 270 120 210 175"/></g><g fill="#485f4e"><circle cx="335" cy="118" r="12"/><circle cx="335" cy="143" r="15"/><circle cx="335" cy="173" r="18"/><circle cx="410" cy="118" r="12"/><circle cx="410" cy="143" r="15"/><circle cx="410" cy="173" r="18"/><circle cx="485" cy="118" r="12"/><circle cx="485" cy="143" r="15"/><circle cx="485" cy="173" r="18"/></g><path d="M540 185 V110 M540 140 L518 122 M540 153 L567 131" stroke="#7b8f4b" stroke-width="7"/><text x="83" y="232">2 plants</text><text x="342" y="232">3 ants</text><text x="512" y="232">1 grass</text><text x="38" y="303">Count kinds separately from the number of individuals.</text>')},
- plants:{title:'Parts of a flowering plant',caption:'A simplified flowering plant: roots take in water and minerals, the stem supports the plant, and leaves use light to make food.',svg:wrap('<path d="M35 253 H605" stroke="#82734f" stroke-width="4"/><path d="M320 250 V95" stroke="#416b3e" stroke-width="9"/><path d="M316 183 C235 188 213 132 315 155 M324 213 C405 218 427 162 325 185" fill="#95b86b" stroke="#416b3e" stroke-width="3"/><g fill="#e2ac55"><circle cx="320" cy="65" r="19"/><circle cx="295" cy="84" r="19"/><circle cx="345" cy="84" r="19"/><circle cx="305" cy="111" r="19"/><circle cx="335" cy="111" r="19"/></g><circle cx="320" cy="88" r="15" fill="#825c30"/><path d="M320 254 V323 M320 274 L278 309 M320 285 L363 323 M320 303 L303 332" fill="none" stroke="#825c30" stroke-width="5"/><text x="385" y="92">Flower</text><text x="180" y="145">Leaf</text><text x="355" y="160">Stem</text><text x="388" y="310">Roots</text>')}
+const wrap = (body) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360"><rect width="640" height="360" rx="18" fill="#f3f6e9"/><g font-family="Arial, sans-serif" font-size="19" fill="#183e35">${body}</g></svg>`;
+const diagrams = {
+  shadows: {
+    title: "How a shadow forms",
+    caption:
+      "Light travels from the source. An opaque object blocks it, leaving a shadow on the surface.",
+    svg: wrap(
+      '<circle cx="85" cy="95" r="32" fill="#e9b449"/><text x="38" y="45">Light source</text><path d="M110 112 L550 270 L315 270 Z" fill="#e3d89c"/><path d="M270 170 L550 270 L315 270 Z" fill="#839084"/><path d="M30 274 H610" stroke="#527062" stroke-width="5"/><rect x="257" y="160" width="24" height="112" rx="3" fill="#214d3e"/><path d="M118 119 L232 161" stroke="#bb8622" stroke-width="3"/><text x="191" y="137">Opaque object</text><text x="370" y="315">Shadow on surface</text><text x="34" y="315">Surface</text>',
+    ),
+  },
+  symmetry: {
+    title: "Compare two halves",
+    caption:
+      "The dashed line is a possible line of symmetry. Compare the shape on each side; real leaves may only be approximately symmetrical.",
+    svg: wrap(
+      '<path d="M320 55 C180 85 160 220 320 285 C480 220 460 85 320 55" fill="#b5cf88" stroke="#365b40" stroke-width="4"/><path d="M320 55 V290 M320 125 L247 157 M320 125 L393 157 M320 183 L239 210 M320 183 L401 210" fill="none" stroke="#557941" stroke-width="3"/><path d="M320 30 V330" stroke="#a04e24" stroke-width="3" stroke-dasharray="8 7"/><text x="42" y="185">Left half</text><text x="478" y="185">Right half</text><text x="337" y="40">Compare across this line</text>',
+    ),
+  },
+  biodiversity: {
+    title: "Individuals and observed kinds",
+    caption:
+      "This example contains six individuals in three visual groups. Appearance alone does not confirm species, and a short visit may miss other life.",
+    svg: wrap(
+      '<text x="36" y="45">Example only: 6 individuals, 3 observed kinds</text><path d="M100 175 V200 M210 175 V200" stroke="#527b45" stroke-width="5"/><g fill="#6b974e"><path d="M100 175 C40 120 70 80 100 100 C130 80 160 120 100 175"/><path d="M210 175 C150 120 180 80 210 100 C240 80 270 120 210 175"/></g><g fill="#485f4e"><circle cx="335" cy="118" r="12"/><circle cx="335" cy="143" r="15"/><circle cx="335" cy="173" r="18"/><circle cx="410" cy="118" r="12"/><circle cx="410" cy="143" r="15"/><circle cx="410" cy="173" r="18"/><circle cx="485" cy="118" r="12"/><circle cx="485" cy="143" r="15"/><circle cx="485" cy="173" r="18"/></g><path d="M540 185 V110 M540 140 L518 122 M540 153 L567 131" stroke="#7b8f4b" stroke-width="7"/><text x="83" y="232">2 plants</text><text x="342" y="232">3 ants</text><text x="512" y="232">1 grass</text><text x="38" y="303">Count kinds separately from the number of individuals.</text>',
+    ),
+  },
+  plants: {
+    title: "Parts of a flowering plant",
+    caption:
+      "A simplified flowering plant: roots take in water and minerals, the stem supports the plant, and leaves use light to make food.",
+    svg: wrap(
+      '<path d="M35 253 H605" stroke="#82734f" stroke-width="4"/><path d="M320 250 V95" stroke="#416b3e" stroke-width="9"/><path d="M316 183 C235 188 213 132 315 155 M324 213 C405 218 427 162 325 185" fill="#95b86b" stroke="#416b3e" stroke-width="3"/><g fill="#e2ac55"><circle cx="320" cy="65" r="19"/><circle cx="295" cy="84" r="19"/><circle cx="345" cy="84" r="19"/><circle cx="305" cy="111" r="19"/><circle cx="335" cy="111" r="19"/></g><circle cx="320" cy="88" r="15" fill="#825c30"/><path d="M320 254 V323 M320 274 L278 309 M320 285 L363 323 M320 303 L303 332" fill="none" stroke="#825c30" stroke-width="5"/><text x="385" y="92">Flower</text><text x="180" y="145">Leaf</text><text x="355" y="160">Stem</text><text x="388" y="310">Roots</text>',
+    ),
+  },
 };
-export function learningDiagram(activity){
- const topic=String(activity.topic||activity.title||'').toLowerCase();
- const kind=/\b(shadow|shadows|light)\b/.test(topic)?'shadows':/\b(symmetry|symmetrical|mirror symmetry)\b/.test(topic)?'symmetry':/\b(biodiversity|census|variety of life)\b/.test(topic)?'biodiversity':/\b(plant parts|parts of a plant|plant growth|flowering plants?)\b/.test(topic)?'plants':null;
- return kind?{...diagrams[kind],kind}:null;
+export function learningDiagram(activity) {
+  const topic = String(activity.topic || activity.title || "").toLowerCase();
+  const kind = /\b(shadow|shadows|light)\b/.test(topic)
+    ? "shadows"
+    : /\b(symmetry|symmetrical|mirror symmetry)\b/.test(topic)
+      ? "symmetry"
+      : /\b(biodiversity|census|variety of life)\b/.test(topic)
+        ? "biodiversity"
+        : /\b(plant parts|parts of a plant|plant growth|flowering plants?)\b/.test(
+              topic,
+            )
+          ? "plants"
+          : null;
+  return kind ? { ...diagrams[kind], kind } : null;
 }
-export function diagramHtml(activity){
- const diagram=learningDiagram(activity);if(!diagram)return referenceHtml(activity);
- const image='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(diagram.svg);
- return `<figure class="learning-visual"><span class="eyebrow">LEARNING ILLUSTRATION</span><h2>${diagram.title}</h2><img src="${image}" alt="${diagram.caption}"><figcaption>${diagram.caption} This is an illustration, not your field evidence.</figcaption><a class="text-link" href="${image}" download="outsideclass-${diagram.kind}.svg">Download illustration</a></figure>`;
+export function diagramHtml(activity) {
+  const diagram = learningDiagram(activity);
+  if (!diagram) return referenceHtml(activity);
+  const image =
+    "data:image/svg+xml;charset=utf-8," + encodeURIComponent(diagram.svg);
+  return `<figure class="learning-visual"><span class="eyebrow">LEARNING ILLUSTRATION</span><h2>${diagram.title}</h2><img src="${image}" alt="${diagram.caption}"><figcaption>${diagram.caption} This is an illustration, not your field evidence.</figcaption><a class="text-link" href="${image}" download="outsideclass-${diagram.kind}.svg">Download illustration</a></figure>`;
 }
 
 // Identified source pages keep their author/licence context and load only on click.
-const references=[
- {matches:/\b(water cycle|evaporation|condensation|precipitation)\b/i,title:'The water cycle',source:'U.S. Geological Survey · Public domain',url:'https://www.usgs.gov/media/images/water-cycle-diagram-english',note:'A reference diagram showing water moving through the environment.'},
- {matches:/\b(solar system|planets?)\b/i,title:'The solar system',source:'Herrera777 · Wikimedia Commons · CC BY-SA 4.0',url:'https://commons.wikimedia.org/wiki/File:Solar_System_diagram_(English).png',note:'Shows the major planets and asteroid belt. Sizes and distances are not to scale.'},
- {matches:/\b(fractions?)\b/i,title:'Unit fractions',source:'BloomyFractal · Wikimedia Commons · CC BY-SA 4.0',url:'https://commons.wikimedia.org/wiki/File:Unit_fraction_representation.png',note:'A visual introduction to equal parts, from one whole to one twelfth.'}
+const references = [
+  {
+    matches: /\b(water cycle|evaporation|condensation|precipitation)\b/i,
+    title: "The water cycle",
+    source: "U.S. Geological Survey · Public domain",
+    url: "https://www.usgs.gov/media/images/water-cycle-diagram-english",
+    note: "A reference diagram showing water moving through the environment.",
+  },
+  {
+    matches: /\b(solar system|planets?)\b/i,
+    title: "The solar system",
+    source: "Herrera777 · Wikimedia Commons · CC BY-SA 4.0",
+    url: "https://commons.wikimedia.org/wiki/File:Solar_System_diagram_(English).png",
+    note: "Shows the major planets and asteroid belt. Sizes and distances are not to scale.",
+  },
+  {
+    matches: /\b(fractions?)\b/i,
+    title: "Unit fractions",
+    source: "BloomyFractal · Wikimedia Commons · CC BY-SA 4.0",
+    url: "https://commons.wikimedia.org/wiki/File:Unit_fraction_representation.png",
+    note: "A visual introduction to equal parts, from one whole to one twelfth.",
+  },
 ];
-export function referenceHtml(activity){
- const topic=String(activity.topic||activity.title||'');const reference=references.find(r=>r.matches.test(topic));
- if(!reference)return '<section class="reference-image"><h2>Need a reference picture?</h2><p class="hint">There is no matched illustration for this question yet. You can upload your own image or browse educational images. Check that any picture fits the idea you are learning.</p><a class="text-link" href="https://commons.wikimedia.org/wiki/Main_Page" target="_blank" rel="noopener noreferrer">Browse Wikimedia Commons images ↗</a></section>';
- return `<section class="reference-image"><span class="eyebrow">EXTERNAL REFERENCE IMAGE</span><h2>${reference.title}</h2><p>${reference.note}</p><p class="hint">${reference.source}. This is a learning reference, not your field evidence. Opens another website and needs internet.</p><a class="text-link" href="${reference.url}" target="_blank" rel="noopener noreferrer">Open reference image and source ↗</a></section>`;
+export function referenceHtml(activity) {
+  const topic = String(activity.topic || activity.title || "");
+  const reference = references.find((r) => r.matches.test(topic));
+  if (!reference)
+    return '<section class="reference-image"><h2>Need a reference picture?</h2><p class="hint">There is no matched illustration for this question yet. You can upload your own image or browse educational images. Check that any picture fits the idea you are learning.</p><a class="text-link" href="https://commons.wikimedia.org/wiki/Main_Page" target="_blank" rel="noopener noreferrer">Browse Wikimedia Commons images ↗</a></section>';
+  return `<section class="reference-image"><span class="eyebrow">EXTERNAL REFERENCE IMAGE</span><h2>${reference.title}</h2><p>${reference.note}</p><p class="hint">${reference.source}. This is a learning reference, not your field evidence. Opens another website and needs internet.</p><a class="text-link" href="${reference.url}" target="_blank" rel="noopener noreferrer">Open reference image and source ↗</a></section>`;
 }
