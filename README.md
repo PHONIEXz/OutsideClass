@@ -57,7 +57,7 @@ npm test
 npm run build
 ```
 
-At release `09440c9`, all 45 automated tests and syntax checks passed. Tests cover validation, provider failures, safety context, storage failures, consent, scoring, backup rollback and per-instance rate limiting. Live browser checks verified practice scoring, saved progress, notebook download, duplicate-safe import and photo evidence. A live image question returned a relevant description and two practice checks. These show functioning flows, not guaranteed factual accuracy or child safety.
+As of 8 October 2026, all 61 automated tests and syntax checks pass. Tests cover validation, provider failures, safety context, storage failures, consent, scoring, backup rollback, timer recovery and per-instance rate limiting. Live browser checks verified practice scoring, saved progress, notebook download, duplicate-safe import and photo evidence. A live image question returned a relevant description and two practice checks. These show functioning flows, not guaranteed factual accuracy or child safety.
 
 A subsequent desktop keyboard pass reached every generation control in order and submitted a live Gemma question. Restoring a backup into an empty browser notebook recovered two cards, a reflection, practice scores and both evidence photos. Physical-phone testing, full offline recovery, a complete accessibility audit and a real outdoor lesson remain launch requirements. Real-world observations should come from learners, not generated examples.
 

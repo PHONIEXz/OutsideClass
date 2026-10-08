@@ -1,4 +1,4 @@
-const CACHE = "outsideclass-v14";
+const CACHE = "outsideclass-v15";
 const pages = ["/", "/learn", "/notebook", "/guides", "/updates", "/activity"];
 const assets = [
   "/learn",
