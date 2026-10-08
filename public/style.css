@@ -170,7 +170,7 @@ textarea:focus {
 .hint {
   font-size: 12px;
   line-height: 1.6;
-  color: #68786a;
+  color: #52655c;
 }
 .primary,
 .secondary {
@@ -254,7 +254,7 @@ footer {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: #68786a;
+  color: #52655c;
 }
 [hidden] {
   display: none !important;
@@ -884,6 +884,7 @@ nav {
   color: #fff;
 }
 .photo-print {
+  display: none;
   margin-top: 28px;
 }
 .photo-print h2 {
@@ -897,7 +898,7 @@ nav {
   color: #52655c;
 }
 @media print {
-  .photo-print {
+  .photo-print:not([hidden]) {
     display: block !important;
     break-inside: avoid;
   }

@@ -15,6 +15,9 @@ All 56 automated tests and the build syntax checks passed on 8 October 2026.
 - Classroom lesson exports remove prior context and learner labels; learner work exports retain practice results.
 - Worker tests simulate no network, stalled network, server errors, cache write failure, versioned icons and obsolete cache cleanup. They verify that API calls and external references never enter the offline cache.
 - Desktop keyboard generation and live Gemma rendering were checked on the published website; restored notes, practice scores and two evidence images were visible in a fresh notebook.
+- The published classroom flow generated a seated, rainy-day, closed-window activity. Two correct practice answers, a synthetic evidence photo and a clearly labelled software-test reflection survived navigation and reload.
+- A paused five-minute timer recovered after reload with its saved card, photo and practice score. The classroom activity-pack download completed. Learner-work export reached a browser-control timeout, so that additional live check remains unverified; its automated round-trip checks pass.
+- Footer link contrast was increased, and the print-only evidence section no longer duplicates uploaded photos on screen. Empty evidence sections remain hidden when printing.
 
 Automated offline tests are not a physical phone/airplane-mode test. A DOM/keyboard pass is not a complete screen-reader or Lighthouse audit. Practice scores do not certify learning, and no outdoor observations have been fabricated.
 
