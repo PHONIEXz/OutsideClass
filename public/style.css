@@ -1111,3 +1111,64 @@ nav {
     display: none !important;
   }
 }
+
+/* Keep controls readable and usable on narrow screens and at browser zoom. */
+input,
+select,
+textarea {
+  font-size: 16px;
+  min-width: 0;
+}
+button,
+summary,
+.nav {
+  min-height: 44px;
+}
+summary {
+  padding-block: 10px;
+}
+summary:focus-visible {
+  outline: 3px solid #b8571e;
+  outline-offset: 4px;
+}
+.hint {
+  color: #52655c;
+}
+.card,
+.note,
+.workspace > *,
+.row > * {
+  min-width: 0;
+}
+h1,
+h2,
+h3,
+p,
+li,
+button,
+label {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 800px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  nav {
+    max-width: 100%;
+  }
+  .nav {
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 400px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  form,
+  aside,
+  .card {
+    padding: 18px;
+  }
+}

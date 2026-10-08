@@ -717,3 +717,47 @@ test("image questions use inline data but never echo image bytes into the saved 
     else process.env.GEMMA_API_KEY = oldKey;
   }
 });
+
+test("the operator pause switch prevents any hosted inference request", async () => {
+  const previous = process.env.GEMMA_DISABLED,
+    previousFetch = globalThis.fetch;
+  let requested = false;
+  process.env.GEMMA_DISABLED = "1";
+  globalThis.fetch = async () => {
+    requested = true;
+    throw Error("must not call provider");
+  };
+  try {
+    const res = response();
+    await handler(
+      {
+        method: "POST",
+        body: {
+          topic: "Shadows",
+          minutes: 10,
+          level: "Beginner",
+          place: "Courtyard",
+        },
+      },
+      res,
+    );
+    assert.equal(res.code, 503);
+    assert.equal(res.data.code, "AI_PAUSED");
+    assert.equal(requested, false);
+  } finally {
+    if (previous === undefined) delete process.env.GEMMA_DISABLED;
+    else process.env.GEMMA_DISABLED = previous;
+    globalThis.fetch = previousFetch;
+  }
+});
+
+test("young learner mode always gets app-owned adult supervision and unbreakable-material guidance", async () => {
+  const { safetyNotes } = await import("../public/safety.js");
+  const notes = safetyNotes({
+    learnerStage: "Young learner",
+    audience: "Myself",
+  }).join(" ");
+  assert.match(notes, /adult nearby/);
+  assert.match(notes, /unbreakable/);
+  assert.match(notes, /glass or sharp/);
+});

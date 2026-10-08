@@ -20,7 +20,8 @@ function browser(saved = [], overrides = {}) {
   const elements = new Map(),
     stored = new Map([["outsideclass-notes-v1", JSON.stringify(saved)]]),
     deleted = [],
-    writes = [];
+    writes = [],
+    exports = [];
   const element = (id) => {
     if (!elements.has(id))
       elements.set(id, {
@@ -44,6 +45,10 @@ function browser(saved = [], overrides = {}) {
     Date,
     URL,
     Promise,
+    Blob,
+    btoa,
+    prompt: () => "Learner 01",
+    captureExport: (blob, name) => exports.push({ blob, name }),
     crypto: { randomUUID: () => "new-card" },
     setInterval() {},
     alert() {},
@@ -84,7 +89,7 @@ function browser(saved = [], overrides = {}) {
   };
   vm.runInNewContext(
     source +
-      `\nglobalThis.api={render,persist,deleteNote,addPhotos,get notes(){return notes;},get current(){return current;},get load(){return photoLoad;},setPhotos(photos){photoDraft=photos;}};`,
+      `\ndownloadBlob=captureExport;globalThis.api={render,navigate,persist,deleteNote,addPhotos,downloadCard,get notes(){return notes;},get current(){return current;},get load(){return photoLoad;},setChecks(value){checkResult=value;},setPhotos(photos){photoDraft=photos;}};`,
     sandbox,
   );
   return {
@@ -93,6 +98,7 @@ function browser(saved = [], overrides = {}) {
     stored,
     deleted,
     writes,
+    exports,
     failSave: () => {
       failSave = true;
     },
@@ -157,12 +163,16 @@ test("double save creates one note and writes its photos once", async () => {
   assert.equal(b.api.notes.length, 1);
   assert.equal(b.writes.length, 1);
 });
-test("saving a new card at the notebook limit cleans up evicted photos", async () => {
+test("a full notebook cannot silently evict a saved card or its photos", async () => {
   const b = browser(Array.from({ length: 100 }, (_, i) => note(String(i))));
   b.api.render(samples[0]);
-  assert.equal(await b.api.persist(false), true);
+  assert.equal(await b.api.persist(false), false);
   assert.equal(b.api.notes.length, 100);
-  assert.deepEqual(b.deleted, ["99"]);
+  assert.equal(b.api.notes[99].id, "99");
+  assert.deepEqual(b.deleted, []);
+  assert.match(b.element("saved-status").textContent, /Download a backup/);
+  b.api.render(samples[0], "0");
+  assert.equal(await b.api.persist(false), true);
 });
 test("a delayed photo save does not change the card the learner navigated to", async () => {
   let finish;
@@ -235,4 +245,60 @@ test("direct explanations render an answer, hide the activity timer trigger and 
     /will be sent to Gemma/,
   );
   assert.equal(b.element("topic").value, "");
+});
+
+test("offline questions explain recovery without calling the provider", async () => {
+  let requested = false;
+  const b = browser([], {
+    navigator: { onLine: false },
+    fetch: async () => {
+      requested = true;
+    },
+  });
+  await b.element("form").onsubmit({ preventDefault() {} });
+  assert.equal(requested, false);
+  assert.match(
+    b.element("status").textContent,
+    /sample or reopen a saved card/,
+  );
+});
+
+test("navigation back to the current card retains unsaved reflection and photos", async () => {
+  const b = browser();
+  b.api.render(samples[0]);
+  await b.api.load;
+  b.element("reflection-noticed").value = "Unsaved observation";
+  b.api.setPhotos([new Blob(["draft"], { type: "image/jpeg" })]);
+  b.api.navigate("guides");
+  b.api.navigate("activity");
+  assert.equal(b.element("reflection-noticed").value, "Unsaved observation");
+  assert.match(b.element("photo-preview").innerHTML, /Evidence photo 1/);
+  assert.equal(b.api.notes.length, 0);
+});
+
+test("class packs remove learner labels while work exports preserve checked answers", async () => {
+  const b = browser();
+  b.api.render({
+    ...samples[0],
+    workLabel: "Private learner name",
+    spot: "Private spot",
+    previous: { noticed: "Private observation" },
+  });
+  await b.api.load;
+  b.element("reflection-noticed").value = "Shared observation";
+  b.api.setChecks({ answers: [0, 1], correct: 2, total: 2 });
+  await b.api.downloadCard(true);
+  const lesson = JSON.parse(await b.exports[0].blob.text()).entries[0];
+  assert.equal(lesson.activity.workLabel, undefined);
+  assert.equal(lesson.activity.previous, undefined);
+  assert.equal(lesson.activity.spot, undefined);
+  assert.equal(lesson.reflection, "");
+  assert.equal(lesson.checkResult, null);
+  await b.api.downloadCard(false);
+  const work = JSON.parse(await b.exports[1].blob.text());
+  const { validateBackup } = await import("../public/notebook-tools.js");
+  const restored = validateBackup(work)[0].entry;
+  assert.equal(restored.reflectionAnswers.noticed, "Shared observation");
+  assert.equal(restored.checkResult.correct, 2);
+  assert.equal(restored.activity.workLabel, "Learner 01");
 });
