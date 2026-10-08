@@ -26,6 +26,10 @@ All 72 automated tests and the build syntax checks passed on 8 October 2026.
 
 Automated offline tests are not a physical phone/airplane-mode test. A DOM/keyboard pass is not a complete screen-reader or Lighthouse audit. Practice scores do not certify learning, and no outdoor observations have been fabricated.
 
+## Owner-reported phone acceptance
+
+On 8 October 2026, the project owner reported: “tested on phone and all worked perfectly fine.” General phone acceptance is recorded as passed by the owner. This was not an independently observed test, and the report does not identify the device/browser or explicitly confirm airplane mode, cross-device restoration, learner-work export or screen-reader checks. Those specific checks remain unverified.
+
 ## Device acceptance session
 
 Use a real Android phone or iPhone in its normal browser:
@@ -66,7 +70,7 @@ The Vercel firewall skill requires the owner to publish staged firewall changes.
 
 ## Still required before broad launch
 
-- Real phone and airplane-mode acceptance session.
+- Explicit airplane-mode recovery and cross-device backup acceptance; general phone testing was reported passed by the owner.
 - Real outdoor lesson and honest write-up.
 - Owner confirmation of Google quotas/billing controls.
 - Custom firewall setup, observed rollout and enforcement.

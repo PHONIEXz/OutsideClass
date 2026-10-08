@@ -4,7 +4,7 @@
 
 [Try OutsideClass](https://outsideclass-phoenix.vercel.app/) · [Report a problem](https://github.com/PHONIEXz/OutsideClass/issues)
 
-![Live Gemma explanation and practice questions](docs/learning-preview.jpg)
+![OutsideClass AI explanation and practice questions](docs/learning-preview.jpg)
 
 ## What you can do
 
@@ -30,7 +30,7 @@ Open <http://localhost:3000>. There are no application dependencies to install. 
 
 ## How the AI works
 
-The assistant is named **OutsideClass AI** in the interface. It is powered by Google-hosted Gemma models; the name does not imply that OutsideClass trained its own model. Google remains the processor for submitted questions and consented images.
+**OutsideClass AI** turns learning questions into explanations and activities using Google-hosted Gemma. Submitted questions and consented images are processed by Google.
 
 Copy `.env.example` to `.env`, set `GEMMA_API_KEY` to your Google AI Studio API key, and set `GEMMA_MODEL` to a Gemma model available to your account. Restart the server. Keep `.env` out of version control; the key is used only on the server.
 
@@ -63,7 +63,7 @@ npm run build
 
 As of 8 October 2026, all 72 automated tests and syntax checks pass. Tests cover validation, provider failures, safety context, storage failures, consent, scoring, backup rollback, timer recovery and per-instance rate limiting. Live browser checks verified practice scoring, saved progress, notebook download, duplicate-safe import and photo evidence. A live image question returned a relevant description and two practice checks. These show functioning flows, not guaranteed factual accuracy or child safety.
 
-A subsequent desktop keyboard pass reached every generation control in order and submitted a live Gemma question. Restoring a backup into an empty browser notebook recovered two cards, a reflection, practice scores and both evidence photos. Physical-phone testing, full offline recovery, a complete accessibility audit and a real outdoor lesson remain launch requirements. Real-world observations should come from learners, not generated examples.
+A subsequent desktop keyboard pass reached every generation control in order and submitted a live Gemma question. Restoring a backup into an empty browser notebook recovered two cards, a reflection, practice scores and both evidence photos. On 8 October 2026, the project owner reported testing on a phone with all tested flows working. The device, browser and individual checks were not recorded. Explicit airplane-mode recovery, a complete accessibility audit and a real outdoor lesson remain launch requirements. Real-world observations should come from learners, not generated examples.
 
 ## Deploy
 
