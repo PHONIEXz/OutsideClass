@@ -22,6 +22,8 @@ function browser(saved = [], overrides = {}) {
     deleted = [],
     writes = [],
     exports = [];
+  for (const [key, value] of Object.entries(overrides.initialStorage || {}))
+    stored.set(key, value);
   const element = (id) => {
     if (!elements.has(id))
       elements.set(id, {
@@ -38,6 +40,7 @@ function browser(saved = [], overrides = {}) {
     return elements.get(id);
   };
   let failSave = false;
+  let failRemove = false;
   const sandbox = {
     console,
     structuredClone,
@@ -69,7 +72,10 @@ function browser(saved = [], overrides = {}) {
         if (failSave) throw Error("quota");
         stored.set(k, v);
       },
-      removeItem: (k) => stored.delete(k),
+      removeItem(k) {
+        if (failRemove) throw Error("storage unavailable");
+        stored.delete(k);
+      },
     },
     samples,
     diagramHtml,
@@ -89,7 +95,7 @@ function browser(saved = [], overrides = {}) {
   };
   vm.runInNewContext(
     source +
-      `\ndownloadBlob=captureExport;globalThis.api={render,navigate,persist,deleteNote,addPhotos,downloadCard,get notes(){return notes;},get current(){return current;},get load(){return photoLoad;},setChecks(value){checkResult=value;},setPhotos(photos){photoDraft=photos;}};`,
+      `\ndownloadBlob=captureExport;globalThis.api={render,navigate,persist,deleteNote,addPhotos,downloadCard,startSession,updateTimer,get session(){return session;},get notes(){return notes;},get current(){return current;},get load(){return photoLoad;},setChecks(value){checkResult=value;},setPhotos(photos){photoDraft=photos;}};`,
     sandbox,
   );
   return {
@@ -101,6 +107,9 @@ function browser(saved = [], overrides = {}) {
     exports,
     failSave: () => {
       failSave = true;
+    },
+    failRemove: () => {
+      failRemove = true;
     },
   };
 }
@@ -301,4 +310,113 @@ test("class packs remove learner labels while work exports preserve checked answ
   assert.equal(restored.reflectionAnswers.noticed, "Shared observation");
   assert.equal(restored.checkResult.correct, 2);
   assert.equal(restored.activity.workLabel, "Learner 01");
+});
+
+test("finishing a timer keeps unsaved photos, checked answers and reflection on its current card", async () => {
+  const b = browser([note("saved", 0)]);
+  b.api.render(samples[0], "saved");
+  await b.api.load;
+  b.api.startSession({ noticed: "Earlier draft" });
+  b.api.setPhotos([new Blob(["new evidence"], { type: "image/jpeg" })]);
+  b.api.setChecks({ answers: [0, 1], correct: 2, total: 2 });
+  b.element("reflection-noticed").value = "New unsaved reflection";
+  b.api.navigate("guides");
+  b.element("timer-finish").onclick();
+  assert.equal(b.api.session, null);
+  assert.equal(b.element("session-panel").hidden, true);
+  assert.equal(b.stored.has("outsideclass-session-v1"), false);
+  assert.equal(await b.api.persist(true), true);
+  assert.equal(b.api.notes[0].photoCount, 1);
+  assert.equal(b.api.notes[0].checkResult.correct, 2);
+  assert.equal(
+    b.api.notes[0].reflectionAnswers.noticed,
+    "New unsaved reflection",
+  );
+});
+
+test("timer pause, reload, resume and suspended-tab expiry use elapsed time", () => {
+  let now = 1000000;
+  class Clock extends Date {
+    static now() {
+      return now;
+    }
+  }
+  const b = browser([note("saved", 0)], { Date: Clock });
+  b.api.render(samples[0], "saved");
+  b.api.startSession({});
+  now += 12500;
+  b.element("timer-pause").onclick();
+  const pausedSeconds = 588;
+  assert.equal(b.api.session.remaining, pausedSeconds);
+  assert.equal(b.api.session.deadline, null);
+  now += 600000;
+  const restored = browser([note("saved", 0)], {
+    Date: Clock,
+    initialStorage: {
+      "outsideclass-session-v1": b.stored.get("outsideclass-session-v1"),
+    },
+  });
+  assert.equal(restored.element("timer-clock").textContent, "09:48");
+  assert.equal(restored.element("timer-status").textContent, "Paused");
+  restored.element("timer-pause").onclick();
+  assert.equal(restored.api.session.deadline, now + pausedSeconds * 1000);
+  now += (pausedSeconds + 10) * 1000;
+  restored.api.updateTimer();
+  assert.equal(restored.element("timer-clock").textContent, "00:00");
+  assert.equal(restored.element("timer-pause").disabled, true);
+  assert.match(restored.element("timer-status").textContent, /Time is up/);
+});
+
+test("finishing a recovered timer opens its saved reflection and practice results", async () => {
+  const saved = {
+    ...note("saved", 0),
+    checkResult: { answers: [0, 1], correct: 2, total: 2 },
+  };
+  const b = browser([saved], {
+    initialStorage: {
+      "outsideclass-session-v1": JSON.stringify({
+        activity: samples[0],
+        id: "saved",
+        draft: { noticed: "Old draft" },
+        remaining: 0,
+        deadline: null,
+      }),
+    },
+  });
+  b.element("timer-finish").onclick();
+  await b.api.load;
+  assert.equal(b.api.current.id, "saved");
+  assert.equal(b.element("reflection-noticed").value, "Original note");
+  assert.equal(
+    b.element("check-status").textContent,
+    "2 of 2 correct. Review the explanation and try again if needed.",
+  );
+});
+
+test("failed timer pause persistence stays visible across countdown updates", () => {
+  const b = browser([note("saved", 0)]);
+  b.api.render(samples[0], "saved");
+  b.api.startSession({});
+  b.failSave();
+  b.element("timer-pause").onclick();
+  b.api.updateTimer();
+  assert.equal(b.api.session.deadline, null);
+  assert.match(
+    b.element("timer-status").textContent,
+    /Paused.*could not be saved/,
+  );
+});
+
+test("failed timer removal warns that it may reappear after reload", () => {
+  const b = browser([note("saved", 0)]);
+  b.api.render(samples[0], "saved");
+  b.api.startSession({});
+  b.failRemove();
+  b.element("timer-finish").onclick();
+  assert.equal(b.api.session, null);
+  assert.equal(b.stored.has("outsideclass-session-v1"), true);
+  assert.match(
+    b.element("saved-status").textContent,
+    /may reappear after reload/,
+  );
 });

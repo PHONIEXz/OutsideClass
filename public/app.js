@@ -649,6 +649,7 @@ else
 
 // Timestamp-based sessions keep accurate elapsed time when a tab is suspended.
 let session = null;
+let sessionStorageFailed = false;
 const sessionKey = "outsideclass-session-v1";
 try {
   const value = JSON.parse(localStorage.getItem(sessionKey) || "null");
@@ -677,8 +678,11 @@ function storeSession() {
   try {
     if (session) localStorage.setItem(sessionKey, JSON.stringify(session));
     else localStorage.removeItem(sessionKey);
+    sessionStorageFailed = false;
+    return true;
   } catch {
-    $("timer-status").textContent = "Timer cannot be saved on this browser.";
+    sessionStorageFailed = true;
+    return false;
   }
 }
 function updateTimer() {
@@ -692,12 +696,14 @@ function updateTimer() {
     String(Math.floor(seconds / 60)).padStart(2, "0") +
     ":" +
     String(seconds % 60).padStart(2, "0");
-  const status =
+  let status =
     seconds === 0
       ? "Time is up. Finish when you are ready."
       : session.deadline === null
         ? "Paused"
         : "Exploration in progress";
+  if (sessionStorageFailed)
+    status += ". Timer changes could not be saved. Keep this tab open.";
   if ($("timer-status").textContent !== status)
     $("timer-status").textContent = status;
   $("timer-pause").textContent = session.deadline === null ? "Resume" : "Pause";
@@ -729,18 +735,24 @@ $("timer-pause").onclick = () => {
 $("timer-finish").onclick = () => {
   if (!session) return;
   const completed = session;
-  const draft =
+  const cardIsOpen =
     current?.id === completed.id &&
-    document.getElementById("reflection-noticed")
-      ? readReflection()
-      : null;
+    document.getElementById("reflection-noticed");
   session = null;
-  storeSession();
+  const cleared = storeSession();
   updateTimer();
-  render(completed.activity, completed.id);
-  if (draft) fillReflection(draft);
-  else if (!notes.some((n) => n.id === completed.id))
-    fillReflection(completed.draft);
+  if (cardIsOpen) {
+    // Keep the live card, including pending photo uploads and unchecked answers.
+    // Re-rendering here would restore the last save and discard newer work.
+    view("activity");
+  } else {
+    render(completed.activity, completed.id);
+    if (!notes.some((n) => n.id === completed.id))
+      fillReflection(completed.draft);
+  }
+  if (!cleared)
+    $("saved-status").textContent =
+      "Timer finished, but its saved state could not be cleared. It may reappear after reload.";
   $("reflection-noticed").focus();
 };
 function updateClock() {

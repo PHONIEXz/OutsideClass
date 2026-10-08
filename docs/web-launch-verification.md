@@ -4,7 +4,7 @@ OutsideClass is a browser-first learning tool: question → hosted Gemma answer 
 
 ## Verified
 
-All 56 automated tests and the build syntax checks passed on 8 October 2026.
+All 61 automated tests and the build syntax checks passed on 8 October 2026.
 
 - Input bounds, structured model output, provider failures and app-owned safety context.
 - Image consent, JPEG size limits, and excluding image bytes from prompts/response metadata.
@@ -18,6 +18,9 @@ All 56 automated tests and the build syntax checks passed on 8 October 2026.
 - The published classroom flow generated a seated, rainy-day, closed-window activity. Two correct practice answers, a synthetic evidence photo and a clearly labelled software-test reflection survived navigation and reload.
 - A paused five-minute timer recovered after reload with its saved card, photo and practice score. The classroom activity-pack download completed. Learner-work export reached a browser-control timeout, so that additional live check remains unverified; its automated round-trip checks pass.
 - Footer link contrast was increased, and the print-only evidence section no longer duplicates uploaded photos on screen. Empty evidence sections remain hidden when printing.
+- A further live sample check reproduced practice-answer loss when finishing a timer after returning to its card. Timer completion now keeps the open card intact, including unsaved photos, answers and reflection text. Regression coverage verifies saving this work after completion, paused timer reload/resume, suspended-tab expiry and restoring a saved card on completion.
+- Failed timer persistence now leaves a visible warning across countdown updates. Failed removal of a finished timer warns that it may reappear on reload.
+- Learner-work download was retried during this follow-up but browser control timed out while opening/handling its optional label prompt. The live download remains unverified; automated exports validate notes, photos and practice results. This timeout alone does not establish an application failure.
 
 Automated offline tests are not a physical phone/airplane-mode test. A DOM/keyboard pass is not a complete screen-reader or Lighthouse audit. Practice scores do not certify learning, and no outdoor observations have been fabricated.
 
