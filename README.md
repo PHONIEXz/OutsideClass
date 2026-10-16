@@ -31,6 +31,8 @@ The application source is shared under the [MIT licence](LICENSE). When reusing 
 
 The school pilot saves on one browser and does not provide staff accounts, cloud sync or access permissions. Its backups are separate from notebook backups. See the [institutional direction and winner review](docs/institutional-direction.md) for verified scope and the next milestones.
 
+![School pilot term report with clearly labelled synthetic test data](docs/school-preview.jpg)
+
 Home, Activities, Notebook, Guides and Updates have separate URLs. Updates are available through [RSS](https://outsideclass-phoenix.vercel.app/updates.xml); no email subscription is collected.
 
 ## Try it without an API key

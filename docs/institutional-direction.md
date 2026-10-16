@@ -33,3 +33,11 @@ Before accepting shared student records or selling multi-user school access:
 6. Pilot with a few schools for four weeks. Measure preparation time, actual session completion, evidence review, voluntary repeat use and willingness to pay. Do not describe a synthetic demo as school adoption or a learning-outcome study.
 
 Keep personal OutsideClass usable throughout the migration. Defer payroll, admissions, fee management, public student profiles, native apps and an open marketplace until the practical-learning workflow has paying repeat users.
+
+## Verification on 16 October 2026
+
+All 78 tests and build checks passed. Six new school-domain tests cover snapshot privacy, required review, report aggregation, evidence/participation limits, malformed backup rejection, and storage round-trip/failure. Existing worker tests now check installation of the separate school shell and modules as well as offline school-route retrieval.
+
+Production commit `c146ec4` was READY and the `/school` route was tested in desktop Chrome. Through the visible UI, a synthetic school/class was created, an unreviewed ready attempt was rejected, a draft was saved and edited, and a reviewed plan was marked ready. A result with evidence greater than participation was rejected. Valid test counts and a clearly labelled synthetic observation were saved, survived a reload and produced matching term totals. The school backup downloaded with the expected class, plan and result. Re-importing into the occupied workspace refused to overwrite it.
+
+The screenshot in `school-preview.jpg` contains synthetic software-test data, not claims of adoption, attendance or learning improvement. No real learners were enrolled or assessed. Browser-extension metadata errors appeared in the browser log; they are not application errors. Physical printing, fresh-browser restoration, real-phone/offline use and multi-tab conflict behaviour were not independently verified through live UI in this session. The relevant pure storage and worker behaviours have automated checks; a full device acceptance session remains necessary.
