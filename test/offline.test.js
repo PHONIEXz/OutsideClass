@@ -118,6 +118,10 @@ test("offline installation includes every page and imported browser module", asy
     "/samples.js",
     "/safety.js",
     "/style.css",
+    "/school.js",
+    "/school-store.js",
+    "/school.css",
+    "/school.html",
   ])
     assert.ok(cache.has(path), path);
   w.setNetwork(async () => {
@@ -132,6 +136,7 @@ test("offline installation includes every page and imported browser module", asy
     "/activity",
   ])
     assert.equal(await (await w.request(path)).text(), "installed:/");
+  assert.equal(await (await w.request("/school")).text(), "installed:/school");
 });
 test("successful visits refresh cached content and versioned icons work offline", async () => {
   const w = worker();

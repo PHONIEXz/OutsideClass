@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#163f35" />
+    <title>School workspace | OutsideClass</title>
+    <link rel="icon" href="/outsideclass-logo.png" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/school.css" />
+    <script type="module" src="/school.js"></script>
+  </head>
+  <body class="school-page">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header>
+      <a class="brand" href="/"
+        ><img
+          class="brand-icon"
+          src="/outsideclass-logo.png"
+          alt=""
+          width="48"
+          height="48"
+        /><span class="brand-wordmark"
+          ><strong>Outside</strong>Class<small
+            >THE WORLD IS YOUR WORKBOOK</small
+          ></span
+        ></a
+      >
+      <nav aria-label="Main">
+        <a class="nav" href="/learn">Activities</a
+        ><a class="nav" href="/notebook">Notebook</a
+        ><a class="nav active" href="/school" aria-current="page">For schools</a
+        ><a class="nav" href="/guides">Guides</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="school-hero">
+        <div>
+          <span class="eyebrow">PRACTICAL LEARNING, TOGETHER</span>
+          <h1>A plan for every class.<br />Evidence from every session.</h1>
+          <p>
+            Turn an investigation into a reviewed class plan, take a printed
+            pack outside, then record what happened.
+          </p>
+        </div>
+        <aside class="school-notice">
+          <strong>Teacher pilot · saved on this browser</strong>
+          <p>
+            No learner names needed. Anyone using this browser can access this
+            workspace. It does not provide school accounts, staff permissions or
+            automatic sync.
+          </p>
+          <p>
+            Download a backup regularly. School records are separate from your
+            personal notebook and its backup.
+          </p>
+        </aside>
+      </section>
+      <p id="school-status" role="status" aria-live="polite"></p>
+      <div id="school-controls">
+        <section class="school-panel">
+          <h2>1. Your school and term</h2>
+          <form id="school-settings">
+            <div class="school-grid">
+              <div>
+                <label for="school-name">School or programme</label
+                ><input
+                  id="school-name"
+                  maxlength="120"
+                  required
+                  placeholder="School name"
+                />
+              </div>
+              <div>
+                <label for="school-term">Term</label
+                ><input
+                  id="school-term"
+                  maxlength="80"
+                  required
+                  placeholder="First term, 2026/27"
+                />
+              </div>
+            </div>
+            <button type="submit" class="primary">
+              Save workspace details
+            </button>
+          </form>
+        </section>
+        <section class="school-panel">
+          <h2>2. Classes</h2>
+          <p>
+            Use class labels and counts. Keep names, contact details and
+            sensitive information out of this pilot.
+          </p>
+          <form id="class-form">
+            <div class="school-grid">
+              <div>
+                <label for="class-name">Class label</label
+                ><input
+                  id="class-name"
+                  maxlength="80"
+                  required
+                  placeholder="Basic 4 A"
+                />
+              </div>
+              <div>
+                <label for="class-size">Number of learners</label
+                ><input
+                  id="class-size"
+                  type="number"
+                  min="1"
+                  max="200"
+                  required
+                  value="30"
+                />
+              </div>
+            </div>
+            <button type="submit" class="secondary">Add class</button>
+          </form>
+          <ul id="class-list"></ul>
+        </section>
+        <section class="school-panel">
+          <h2>3. Plan an investigation</h2>
+          <p>
+            Start from a built-in sample or an activity saved in your notebook.
+            Personal reflections, images and learner labels are excluded.
+          </p>
+          <form id="plan-form">
+            <div class="school-grid">
+              <div>
+                <label for="plan-class">Class</label
+                ><select id="plan-class" required></select>
+              </div>
+              <div>
+                <label for="plan-date">Session date</label
+                ><input id="plan-date" type="date" required />
+              </div>
+            </div>
+            <label for="plan-lesson">Activity</label
+            ><select id="plan-lesson" required></select>
+            <div id="lesson-preview"></div>
+            <label for="plan-objective"
+              >What should learners be able to demonstrate?</label
+            ><textarea
+              id="plan-objective"
+              maxlength="600"
+              required
+              placeholder="Compare the shadow of the same object at two recorded times."
+            ></textarea
+            ><label for="plan-reference"
+              >Curriculum source and reference (optional)</label
+            ><input
+              id="plan-reference"
+              maxlength="300"
+              placeholder="Document title, edition, topic or page"
+            />
+            <p class="hint">
+              Enter a reference you have checked. OutsideClass does not certify
+              alignment or invent official curriculum codes.
+            </p>
+            <label for="plan-safety"
+              >Supervision, boundaries, materials and access arrangements</label
+            ><textarea
+              id="plan-safety"
+              maxlength="1200"
+              placeholder="Adult leads; stay within the courtyard; unbreakable materials; seated alternative available."
+            ></textarea
+            ><label class="school-check"
+              ><input id="plan-reviewed" type="checkbox" />I have reviewed the
+              steps, accuracy, suitability and arrangements for this
+              class.</label
+            >
+            <div class="actions">
+              <button
+                class="secondary"
+                type="submit"
+                name="intent"
+                value="draft"
+              >
+                Save draft</button
+              ><button
+                class="primary"
+                type="submit"
+                name="intent"
+                value="ready"
+              >
+                Mark ready
+              </button>
+              <button class="secondary" type="button" id="cancel-edit" hidden>
+                Cancel editing
+              </button>
+            </div>
+          </form>
+        </section>
+        <section class="school-panel">
+          <h2>Session board</h2>
+          <p>
+            Ready means reviewed by the teacher using this device. It is not
+            independent approval or a safety certification.
+          </p>
+          <div id="session-board"></div>
+        </section>
+        <section class="school-panel">
+          <h2>Term overview</h2>
+          <div id="school-report"></div>
+          <p class="hint">
+            Participant-sessions and evidence-sessions count attendance across
+            sessions, not unique learners or mastery. Counts and observations
+            are entered by the teacher.
+          </p>
+          <button id="print-report" class="secondary">Print term report</button>
+        </section>
+        <section class="school-panel">
+          <h2>Keep your workspace</h2>
+          <div class="actions">
+            <button id="school-backup" class="secondary">
+              Download school backup</button
+            ><label for="school-import"
+              >Restore school backup<input
+                id="school-import"
+                type="file"
+                accept="application/json,.json"
+            /></label>
+          </div>
+          <p class="hint">
+            Restore works in an empty school workspace and never replaces
+            existing records. Use a separate browser profile to review a backup
+            alongside current work. Clearing browser data removes this
+            workspace.
+          </p>
+        </section>
+      </div>
+      <section
+        id="school-print"
+        hidden
+        aria-label="Printable school pack"
+      ></section>
+    </main>
+    <footer>
+      <span>Less scrolling. More noticing.</span
+      ><a href="/guides">Help and privacy</a>
+    </footer>
+  </body>
+</html>

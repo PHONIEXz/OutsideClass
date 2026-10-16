@@ -1,0 +1,142 @@
+.school-page main {
+  max-width: 1060px;
+  margin: 0 auto;
+}
+.school-page #main {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+.school-hero {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 32px;
+  padding: 48px 0 24px;
+}
+.school-hero h1 {
+  font-size: clamp(32px, 4vw, 52px);
+}
+.school-notice {
+  background: #e7eedf;
+  padding: 24px;
+  border-radius: 12px;
+  align-self: center;
+}
+.school-notice p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.school-panel {
+  background: #fffdf7;
+  border: 1px solid #ced8c9;
+  padding: 28px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+.school-panel h2 {
+  margin-top: 0;
+  font-size: 26px;
+}
+.school-panel form {
+  max-width: none;
+}
+.school-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.school-page input,
+.school-page select,
+.school-page textarea {
+  width: 100%;
+  margin: 8px 0 18px;
+}
+.school-check {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.school-check input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin: 0;
+}
+.school-session {
+  border-top: 1px solid #ced8c9;
+  padding: 24px 0;
+}
+.school-session h3 {
+  font-size: 23px;
+  margin: 12px 0;
+}
+.school-session summary {
+  cursor: pointer;
+}
+.school-page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.school-page th,
+.school-page td {
+  padding: 12px;
+  border-bottom: 1px solid #ced8c9;
+  text-align: left;
+}
+.school-table {
+  overflow-x: auto;
+}
+#lesson-preview {
+  border-left: 3px solid #63836b;
+  padding: 4px 20px;
+  margin: 12px 0 24px;
+}
+#school-status {
+  position: sticky;
+  top: 0;
+  background: #f2f5e9;
+  z-index: 2;
+  padding: 12px;
+}
+#school-status:empty {
+  display: none;
+}
+#school-print .writing-space {
+  min-height: 90px;
+  border-bottom: 1px solid #555;
+}
+@media (max-width: 700px) {
+  .school-hero,
+  .school-grid {
+    grid-template-columns: 1fr;
+  }
+  .school-panel {
+    padding: 18px;
+  }
+}
+@media print {
+  .school-page header,
+  .school-page footer,
+  .school-hero,
+  #school-status,
+  #school-controls {
+    display: none !important;
+  }
+  #school-print:not([hidden]) {
+    display: block !important;
+  }
+  .school-page main {
+    width: 100%;
+    max-width: none;
+  }
+  #school-print h1 {
+    font-size: 26px;
+  }
+  #school-print p,
+  #school-print li {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  #school-print {
+    color: #000;
+  }
+}
