@@ -27,6 +27,9 @@ The application source is shared under the [MIT licence](LICENSE). When reusing 
 - Check understanding, explore a next question, and save reflections and practice results.
 - Return to a named spot, compare discoveries, and download or restore backups with photos.
 - Print lessons or exchange classroom activity packs and learner work files.
+- Use the [school planning pilot](https://outsideclass-phoenix.vercel.app/school) to organise class investigations, review plans, print group packs, record session evidence counts and back up a term workspace.
+
+The school pilot saves on one browser and does not provide staff accounts, cloud sync or access permissions. Its backups are separate from notebook backups. See the [institutional direction and winner review](docs/institutional-direction.md) for verified scope and the next milestones.
 
 Home, Activities, Notebook, Guides and Updates have separate URLs. Updates are available through [RSS](https://outsideclass-phoenix.vercel.app/updates.xml); no email subscription is collected.
 
